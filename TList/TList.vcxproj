@@ -21,6 +21,9 @@
   <ItemGroup>
     <ClInclude Include="TSinglyLinkedList.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main_file.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
