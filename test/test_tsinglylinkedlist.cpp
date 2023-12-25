@@ -4,5 +4,5 @@
 #define TSLL TSinglyLinkedList
 
 TEST(TSLL, can_create_tsll_with_default_constructor) {
-
+	ASSERT_NO_THROW(TSLL<int> a);
 }

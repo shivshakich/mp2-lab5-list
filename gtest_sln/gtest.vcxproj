@@ -11,10 +11,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\gtest\gtest.h" />
+    <ClCompile Include="..\googletest\src\gtest-all.cc" />
+    <ClCompile Include="..\googletest\src\gtest-assertion-result.cc" />
+    <ClCompile Include="..\googletest\src\gtest-death-test.cc" />
+    <ClCompile Include="..\googletest\src\gtest-filepath.cc" />
+    <ClCompile Include="..\googletest\src\gtest-matchers.cc" />
+    <ClCompile Include="..\googletest\src\gtest-port.cc" />
+    <ClCompile Include="..\googletest\src\gtest-printers.cc" />
+    <ClCompile Include="..\googletest\src\gtest-test-part.cc" />
+    <ClCompile Include="..\googletest\src\gtest-typed-test.cc" />
+    <ClCompile Include="..\googletest\src\gtest.cc" />
+    <ClCompile Include="..\googletest\src\gtest_main.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\gtest\gtest-all.cc" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-assertion-result.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-death-test.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-matchers.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-message.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-param-test.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-printers.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-spi.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-test-part.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest-typed-test.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest_pred_impl.h" />
+    <ClInclude Include="..\googletest\include\gtest\gtest_prod.h" />
+    <ClInclude Include="..\googletest\src\gtest-internal-inl.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{60932AFC-7808-48B7-B3BF-F2BC151C0065}</ProjectGuid>
