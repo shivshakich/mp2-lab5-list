@@ -32,9 +32,12 @@ public:
 	void SetPos(int _pos);								// установить значение pCurr в зависимости от позиция _pos
 	void Reset();										// установить pCurr на начало списка
 	void GoNext();										// перейти к следующему звену
-	bool IsEnd() const noexcept;						
+	bool IsEnd() const noexcept;					
+
 	void DelList();
 };
+
+// констркуторы 
 
 template <class T>
 TList<T>::TList() : pStop(nullptr), pFirst(pStop), pLast(pStop), length(0), pCurr(pStop), pPrev(pStop), pos(-1) {}

@@ -24,7 +24,7 @@
     <ProjectGuid>{c8564fc5-211b-4318-a5b2-4d29beb674ef}</ProjectGuid>
     <RootNamespace>TList</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>tlist</ProjectName>
+    <ProjectName>list</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
