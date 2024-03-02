@@ -44,6 +44,7 @@ public:
 	// другие методы
 					
 	void DelList();
+	int GetLength() const;
 
 	// comparison operators
 
