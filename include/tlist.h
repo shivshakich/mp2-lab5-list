@@ -54,21 +54,21 @@ public:
 
 // CONSTRUCTORS & DESTRUCTOR
 
-template <class T>
+template <class T>										/* default constructor */
 TList<T>::TList() : pStop(nullptr), pFirst(pStop), pLast(pStop), length(0), pCurr(pStop), pPrev(pStop), pos(-1) {}
 
-template <class T>
+template <class T>										/* type conversion constructor */
 TList<T>::TList(const T& _val) : pStop(nullptr), pCurr(pStop), pPrev(pStop), pos(-1) {
 	pFirst = new TNode<T>{ _val, pStop };
 	pLast = pFirst;
 	length = 1;
 }
 
-template<class T> 
+template<class T>										/* copy constructor */
 TList<T>::TList(const TList<T>& _list) {
 	this->pStop		= _list.pStop;
 	this->length	= _list.length;
-	this->pos		= _list.pos;
+	this->pos		= -1;
 	pPrev = pCurr = pStop;
 
 	if (_list.pFirst == pStop) {
@@ -88,26 +88,9 @@ TList<T>::TList(const TList<T>& _list) {
 		pLast = tmpNode;
 	}
 	pLast->pNext = pStop;
-
-	// находим значения для pCurr, pPrev
-
-	// для случая pos == -1 уже найдены ранее pCurr, pPrev
-	
-	if (pos == 0) 			// для случая pos == 0
-		pCurr = pFirst;
-
-	// для случая pos >= 1 находим pPrev, по которому найдём pCurr = pPrev->pNext
-	else if (pos > 0) {
-		pPrev = pFirst;
-		int posPrev = pos - 1;
-		for (int i = 0; i < posPrev; ++i) {
-			pPrev = pPrev->pNext;
-		}
-		pCurr = pPrev->pNext;
-	}
 }
 
-template <class T>
+template <class T>										/* destructor */
 TList<T>::~TList() { DelList(); }
 
 // OPERATOR=
@@ -116,4 +99,17 @@ template <class T>
 TList<T>& TList<T>::operator=(const T& _val) {
 	this->DelList();
 	this->InsLast(_val);
+}
+
+template <class T> 
+TList<T>& TList<T>::operator=(const TList<T>& in) {
+	if (this == &in)
+		return *this;
+
+	TNode<T>* currNode = in.pFirst;
+	const int IN_LEN = in.length;
+
+	pPrev = pCurr = pStop;
+	pos = -1;
+
 }

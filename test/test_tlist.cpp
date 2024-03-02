@@ -97,7 +97,7 @@ TEST(TList, correct_operation_of_the_equivality_operator) {
 	ASSERT_TRUE(l1 == l2);
 }
 
-// SetPos, InsCurr, DelCurr, GetCurr, IsEnd
+// SetPos, InsCurr, DelCurr
 
 TEST(TList, can_set_only_zero_position_for_an_empty_list) {
 	int n = 908;
@@ -143,12 +143,21 @@ TEST(TList, correct_deletion_of_the_vertex_by_current_pointer) {
 
 	for (int i = 0; i < SIZE; ++i) 
 		l.InsLast(n[i]);
+	// n[0] n[1] n[2] n[3] n[4]
 
 	l.SetPos(4);
 	ASSERT_NO_THROW(l.DelCurr());
 	ASSERT_EQ(l.GetLength(), 4);
 	ASSERT_ANY_THROW(l.DelCurr());
+	// n[0] n[1] n[2] n[3] ----
 
 	l.SetPos(1);
-	// дописать
+	ASSERT_NO_THROW(l.DelCurr());
+	// n[0] ---- n[2] n[3] ----
+	ASSERT_EQ(l.GetLength(), 3);
+
+	l.Reset();
+	ASSERT_EQ(l.GetCurr()->value, n[0]);	l.GoNext();
+	ASSERT_EQ(l.GetCurr()->value, n[2]);	l.GoNext();
+	ASSERT_EQ(l.GetCurr()->value, n[3]);
 }
