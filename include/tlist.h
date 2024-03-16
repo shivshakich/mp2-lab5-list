@@ -22,8 +22,9 @@ public:
 	TList(const T& _val);
 	TList(const TList<T>& _list);
 	~TList();
+
 	TList<T>& operator=(const T& _val);
-	TList<T>& operator=(const TList<T>& _list);
+	TList<T>& operator=(TList<T>& _list);
 
 	// втсавка или удаление звена
 
@@ -33,10 +34,10 @@ public:
 	void DelFirst();
 	void DelCurr();
 
-	// методы доступа к pCurr
+	// методы доступа к pCurr; итераторы
 
 	TNode<T>* GetCurr() const;							// доступ к pCurr значению
-	void SetPos(int _pos);								// установить значение pCurr в зависимости от позиция _pos
+	void SetPos(const int _pos);						// установить значение pCurr в зависимости от позиция _pos
 	void Reset();										// установить pCurr на начало списка
 	void GoNext();										// перейти к следующему звену
 	bool IsEnd() const noexcept;
@@ -93,6 +94,45 @@ TList<T>::TList(const TList<T>& _list) {
 template <class T>										/* destructor */
 TList<T>::~TList() { DelList(); }
 
+// ITERATORS : getcurr, setpos, reset, gonext, isend
+
+template <class T>
+TNode<T>* TList<T>::GetCurr() const { return pCurr; }
+
+template <class T>
+void TList<T>::SetPos(const int _pos) {
+	if (_pos < 0 || this->length < _pos)
+		throw "TList<T>::SetPos, invalid input value";
+
+	if (pos == -1 || _pos < pos)
+		Reset();
+
+	for (; pos < _pos; GoNext())
+		;
+}
+
+template <class T>
+void TList<T>::Reset() {
+	pPrev = pStop;
+	pCurr = pFirst;
+	pos = 0;
+}
+
+template <class T>
+void TList<T>::GoNext() {
+	if (IsEnd())
+		throw "GoNext, pCurr points to pStop";
+
+	pPrev = pCurr;
+	pCurr = pCurr->pNext;
+	++pos;
+}
+
+template <class T>
+bool TList<T>::IsEnd() const noexcept {
+	return pCurr == pStop;
+}
+
 // OPERATOR=
 
 template <class T>
@@ -102,14 +142,32 @@ TList<T>& TList<T>::operator=(const T& _val) {
 }
 
 template <class T> 
-TList<T>& TList<T>::operator=(const TList<T>& in) {
-	if (this == &in)
-		return *this;
+TList<T>& TList<T>::operator=(TList<T>& in) {
+	const int LEN = in.length;
 
-	TNode<T>* currNode = in.pFirst;
-	const int IN_LEN = in.length;
+	int count = LEN;
 
-	pPrev = pCurr = pStop;
-	pos = -1;
+	if (length < LEN) {
+		count = length;
 
+		for (in.SetPos(length); !in.IsEnd(); in.GoNext())
+			this->InsLast(in.pCurr->value);
+	}
+
+	while (LEN < length)
+		this->DelFirst();
+
+	// теперь length == LEN, причём нужно поменять значения звеньев с 0 по count-1
+
+	this->Reset();
+	in.Reset();
+	for (int i = 0; i < count; ++i) {
+		this->pCurr->value = in.pCurr->value;
+		this->GoNext();
+		in.GoNext();
+	}
+
+	this->pStop = in.pStop;
+
+	return *this;
 }
