@@ -45,12 +45,12 @@ public:
 	// другие методы
 					
 	void DelList();
-	int GetLength() const;
+	int GetLength() const noexcept;
 
 	// comparison operators
 
-	bool operator==(const TList<T>& _list) const;
-	bool operator!=(const TList<T>& _list) const;
+	bool operator==(TList<T>& _list);
+	bool operator!=(TList<T>& _list);
 };
 
 // CONSTRUCTORS & DESTRUCTOR
@@ -115,7 +115,7 @@ template <class T>
 void TList<T>::Reset() {
 	pPrev = pStop;
 	pCurr = pFirst;
-	pos = 0;
+	pos = (pFirst != pStop) - 1;
 }
 
 template <class T>
@@ -170,4 +170,132 @@ TList<T>& TList<T>::operator=(TList<T>& in) {
 	this->pStop = in.pStop;
 
 	return *this;
+}
+
+// OTHER METHODS: dellist, getlength
+
+template <class T>
+void TList<T>::DelList() {
+	pCurr = pFirst;
+
+	while (pCurr != pStop) {
+		pPrev = pCurr;
+		pCurr = pCurr->pNext;
+
+		delete pPrev;
+	}
+
+	pFirst = pLast = pPrev = pStop;
+	length = 0;
+	pos = -1;
+}
+
+template <class T>
+int TList<T>::GetLength() const noexcept { return length; }
+
+// COMPARISON METHODS
+
+template <class T>
+bool TList<T>::operator==(TList<T>& l) {
+	if (this == &l)
+		return true;
+
+	if (length != l.length)
+		return false;
+
+	bool res = true;
+
+	// если lenght == l.length == 0, то вернётся true
+
+	for (Reset(), l.Reset(); !IsEnd() && res; GoNext(), l.GoNext()) 
+		res = pCurr->value == l.pCurr->value;
+
+	return res;
+}
+
+template <class T>
+bool TList<T>::operator!=(TList<T>& l) { return this->operator==(l); }
+
+// INSERT AND DELETE METHODS
+
+template <class T>
+void TList<T>::InsFirst(const T& val) {
+	TNode<T>* addNode = new TNode<T>;
+	addNode->value = val;
+	addNode->pNext = pFirst;
+
+	pFirst = addNode;
+	++length;
+
+	if (pos >= 0) {
+		pPrev = pos == 0 ? pFirst : pPrev;
+		++pos;
+	}
+}
+
+template <class T>
+void TList<T>::InsLast(const T& val) {
+	TNode<T>* addNode = new TNode<T>{ val, pStop };
+
+	pLast->pNext = addNode;
+	pLast = addNode;
+
+	if (pos == length)
+		pCurr == pLast;
+
+	++length;
+}
+
+template <class T>
+void TList<T>::InsCurr(const T& val) {
+	if (pCurr == pStop)
+		throw "TList<T> InsCurr, invalid pCurr";
+
+	if (pCurr == pFirst) {
+		this->InsFirst(val);
+		return;
+	}
+
+	TNode<T>* addNode = new TNode<T> {val, this->pCurr};
+
+	pPrev->pNext = pCurr = addNode;
+	++length;
+}
+
+template <class T>
+void TList<T>::DelFirst() {
+	if (pFirst == pStop)
+		throw "TList<T> DelFirst, pFirst == pStop";
+
+	TNode<T>* delNode = pFirst;
+	pFirst = pFirst->pNext;
+
+	if (length == 1)
+		pLast = pStop;
+
+	if (pos >= 0) {
+		if (pPrev == delNode) pPrev = pStop;
+		if (pCurr == delNode) pCurr = pStop;
+		--pos;
+	}
+
+	delete delNode;
+	--length;
+}
+
+template <class T>
+void TList<T>::DelCurr() {
+	if (pCurr == pStop)
+		throw "TList<T> DelCurr, pCurr == pStop";
+
+	if (pCurr == pFirst) {
+		DelFirst();
+		return;
+	}
+
+	TNode<T>* delNode = pCurr;
+	pPrev->pNext = pCurr = pCurr->pNext;
+
+	delete delNode;
+	--length;
 }
