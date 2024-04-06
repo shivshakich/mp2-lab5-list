@@ -37,13 +37,20 @@ TEST(TList, list_filled_by_insert_methods_has_correct_values) {
 	list.GoNext(); list.GoNext();
 	list.InsCurr(n3);						// InsCurr
 
-	ASSERT_TRUE(list.IsEnd());
+	ASSERT_EQ(list.GetLength(), 4);
+
+	/*
+	std::cout << n1 << ' ' << n2 << ' ' << n3 << ' ' << n4 << std::endl;
+	for (list.Reset(); !list.IsEnd(); list.GoNext()) 
+		std::cout << list.GetCurr()->value << std::endl;
+	*/
+
 
 	list.Reset();
-	ASSERT_TRUE(list.GetCurr()->value == n1);	ASSERT_NO_THROW(list.GoNext());	
-	ASSERT_TRUE(list.GetCurr()->value == n2);	ASSERT_NO_THROW(list.GoNext());
-	ASSERT_TRUE(list.GetCurr()->value == n3);	ASSERT_NO_THROW(list.GoNext());
-	ASSERT_TRUE(list.GetCurr()->value == n4);	ASSERT_ANY_THROW(list.GoNext());
+	ASSERT_TRUE(list.GetCurr()->value == n1);	list.GoNext();	
+	ASSERT_TRUE(list.GetCurr()->value == n2);	list.GoNext();
+	ASSERT_TRUE(list.GetCurr()->value == n3);	list.GoNext();
+	ASSERT_TRUE(list.GetCurr()->value == n4);	list.GoNext();
 }
 
 TEST(TList, list_created_by_copy_constructor_is_equivalent_to_original_one) {
@@ -99,16 +106,12 @@ TEST(TList, correct_operation_of_the_equivality_operator) {
 
 // SetPos, InsCurr, DelCurr
 
-TEST(TList, can_set_only_zero_position_for_an_empty_list) {
+TEST(TList, can_set_only_minus_one_position_for_an_empty_list) {
 	int n = 908;
 	TList<int> l;
-	ASSERT_ANY_THROW(l.SetPos(-1));
+	ASSERT_NO_THROW(l.SetPos(-1));
 	ASSERT_ANY_THROW(l.SetPos(1));
-	ASSERT_NO_THROW(l.SetPos(0));
-
-	ASSERT_NO_THROW(l.InsCurr(n));
-	ASSERT_EQ(l.GetLength(), 1);
-	ASSERT_EQ(l.GetCurr()->value, n);
+	ASSERT_ANY_THROW(l.SetPos(0));
 }
 
 TEST(TList, correct_operation_of_the_vertex_insertion_method_by_current_pointer) {

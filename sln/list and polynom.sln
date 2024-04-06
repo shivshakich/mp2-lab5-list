@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "list", "TList\TList.vcxproj", "{C8564FC5-211B-4318-A5B2-4D29BEB674EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{6C7600FF-75A4-409A-91D9-EF4475144950}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9735388E-1D73-439F-AC01-FA4C0DE8085D} = {9735388E-1D73-439F-AC01-FA4C0DE8085D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "gtest\gtest.vcxproj", "{9735388E-1D73-439F-AC01-FA4C0DE8085D}"
 EndProject

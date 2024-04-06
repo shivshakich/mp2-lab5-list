@@ -20,7 +20,7 @@ public:
 
 	TList();
 	TList(const T& _val);
-	TList(const TList<T>& _list);
+	TList(TList<T>& _list);
 	~TList();
 
 	TList<T>& operator=(const T& _val);
@@ -66,29 +66,27 @@ TList<T>::TList(const T& _val) : pStop(nullptr), pCurr(pStop), pPrev(pStop), pos
 }
 
 template<class T>										/* copy constructor */
-TList<T>::TList(const TList<T>& _list) {
+TList<T>::TList(TList<T>& _list) {
 	this->pStop		= _list.pStop;
 	this->length	= _list.length;
-	this->pos		= -1;
-	pPrev = pCurr = pStop;
+	pCurr = pPrev = pStop;
+	pos = -1;
 
 	if (_list.pFirst == pStop) {
 		pFirst = pLast = pStop;
 		return;
 	}
 
+	_list.Reset();
 	pLast = pFirst = new TNode<T>;
-	pFirst->value = _list.pFirst->value;
+	pFirst->value = _list.pCurr->value;
+	_list.GoNext();
 
-	TNode<T>* currNode = _list.pFirst->pNext;
-
-	while (currNode != pStop) {				// создаём список
-		TNode<T>* tmpNode = new TNode<T>;
-		tmpNode->value = currNode->value;
-		pLast->pNext = tmpNode;
-		pLast = tmpNode;
+	for (; !_list.IsEnd(); _list.GoNext()) {
+		pLast->pNext = new TNode<T>;
+		pLast = pLast->pNext;
+		pLast->value = _list.pCurr->value;
 	}
-	pLast->pNext = pStop;
 }
 
 template <class T>										/* destructor */
@@ -101,14 +99,16 @@ TNode<T>* TList<T>::GetCurr() const { return pCurr; }
 
 template <class T>
 void TList<T>::SetPos(const int _pos) {
-	if (_pos < 0 || this->length < _pos)
+	if (_pos < -1 || this->length <= _pos)
 		throw "TList<T>::SetPos, invalid input value";
 
-	if (pos == -1 || _pos < pos)
-		Reset();
-
-	for (; pos < _pos; GoNext())
-		;
+	if (_pos == -1) {
+		pCurr = pPrev = pStop;
+		pos = -1;
+	}
+	else
+		for (Reset(); pos != _pos; GoNext())
+			;
 }
 
 template <class T>
@@ -139,6 +139,8 @@ template <class T>
 TList<T>& TList<T>::operator=(const T& _val) {
 	this->DelList();
 	this->InsLast(_val);
+
+	return *this;
 }
 
 template <class T> 
@@ -237,11 +239,13 @@ template <class T>
 void TList<T>::InsLast(const T& val) {
 	TNode<T>* addNode = new TNode<T>{ val, pStop };
 
-	pLast->pNext = addNode;
-	pLast = addNode;
+	if (length == 0)
+		pFirst = pLast = addNode;
+	else
+		pLast = pLast->pNext = addNode;
 
 	if (pos == length)
-		pCurr == pLast;
+		pCurr = pLast;
 
 	++length;
 }
@@ -253,6 +257,10 @@ void TList<T>::InsCurr(const T& val) {
 
 	if (pCurr == pFirst) {
 		this->InsFirst(val);
+		return;
+	}
+	else if (pCurr == pLast) {
+		this->InsLast(val);
 		return;
 	}
 
