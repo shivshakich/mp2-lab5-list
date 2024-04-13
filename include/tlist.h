@@ -222,15 +222,13 @@ bool TList<T>::operator!=(TList<T>& l) { return this->operator==(l); }
 
 template <class T>
 void TList<T>::InsFirst(const T& val) {
-	TNode<T>* addNode = new TNode<T>;
-	addNode->value = val;
-	addNode->pNext = pFirst;
+	TNode<T>* addNode = new TNode<T>{ val, pFirst };
 
 	pFirst = addNode;
 	++length;
 
 	if (pos >= 0) {
-		pPrev = pos == 0 ? pFirst : pPrev;
+		if (pPrev == pStop) pPrev = pFirst;
 		++pos;
 	}
 }
@@ -244,9 +242,6 @@ void TList<T>::InsLast(const T& val) {
 	else
 		pLast = pLast->pNext = addNode;
 
-	if (pos == length)
-		pCurr = pLast;
-
 	++length;
 }
 
@@ -255,19 +250,14 @@ void TList<T>::InsCurr(const T& val) {
 	if (pCurr == pStop)
 		throw "TList<T> InsCurr, invalid pCurr";
 
-	if (pCurr == pFirst) {
+	if (pCurr == pFirst) 
 		this->InsFirst(val);
-		return;
+	else {
+		TNode<T>* pNew = new TNode<T>{ val, pCurr};
+		pPrev->pNext = pNew;
+		pPrev = pNew;
+		++pos; ++length;
 	}
-	else if (pCurr == pLast) {
-		this->InsLast(val);
-		return;
-	}
-
-	TNode<T>* addNode = new TNode<T> {val, this->pCurr};
-
-	pPrev->pNext = pCurr = addNode;
-	++length;
 }
 
 template <class T>

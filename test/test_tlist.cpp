@@ -118,10 +118,9 @@ TEST(TList, correct_operation_of_the_vertex_insertion_method_by_current_pointer)
 	const int SIZE = 3;
 	int n[SIZE] = { 12, 34, 56 };
 
-	TList<int> l1;
+	TList<int> l1(n[2]);
 
 	l1.Reset();
-	ASSERT_NO_THROW(l1.InsCurr(n[2]));
 	l1.SetPos(0);
 	ASSERT_NO_THROW(l1.InsCurr(n[0]));
 	l1.SetPos(1);
