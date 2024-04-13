@@ -18,39 +18,39 @@ public:
 
 	// конструкторы, деструктор и операторы копирования
 
-	TList();
-	TList(const T& _val);
-	TList(TList<T>& _list);
-	~TList();
+	virtual TList();
+	virtual TList(const T& _val);
+	virtual TList(TList<T>& _list);
+	virtual ~TList();
 
-	TList<T>& operator=(const T& _val);
-	TList<T>& operator=(TList<T>& _list);
+	virtual TList<T>& operator=(const T& _val);
+	virtual TList<T>& operator=(TList<T>& _list);
 
 	// втсавка или удаление звена
 
-	void InsFirst(const T& _val);
-	void InsLast(const T& _val);
-	void InsCurr(const T& _val);
-	void DelFirst();
-	void DelCurr();
+	virtual void InsFirst(const T& _val);
+	virtual void InsLast(const T& _val);
+	virtual void InsCurr(const T& _val);
+	virtual void DelFirst();
+	virtual void DelCurr();
 
 	// методы доступа к pCurr; итераторы
 
-	TNode<T>* GetCurr() const;							// доступ к pCurr значению
-	void SetPos(const int _pos);						// установить значение pCurr в зависимости от позиция _pos
-	void Reset();										// установить pCurr на начало списка
-	void GoNext();										// перейти к следующему звену
-	bool IsEnd() const noexcept;
+	virtual const TNode<T>* GetCurr() const;							// доступ к pCurr значению
+	virtual void SetPos(const int _pos);								// установить значение pCurr в зависимости от позиция _pos
+	virtual void Reset();										// установить pCurr на начало списка
+	virtual void GoNext();										// перейти к следующему звену
+	virtual bool IsEnd() const noexcept;
 
 	// другие методы
 					
-	void DelList();
-	int GetLength() const noexcept;
+	virtual void DelList();
+	virtual int GetLength() const noexcept;
 
 	// comparison operators
 
-	bool operator==(TList<T>& _list);
-	bool operator!=(TList<T>& _list);
+	virtual bool operator==(TList<T>& _list);
+	virtual bool operator!=(TList<T>& _list);
 };
 
 // CONSTRUCTORS & DESTRUCTOR
@@ -95,7 +95,7 @@ TList<T>::~TList() { DelList(); }
 // ITERATORS : getcurr, setpos, reset, gonext, isend
 
 template <class T>
-TNode<T>* TList<T>::GetCurr() const { return pCurr; }
+const TNode<T>* TList<T>::GetCurr() const { return pCurr; }
 
 template <class T>
 void TList<T>::SetPos(const int _pos) {
