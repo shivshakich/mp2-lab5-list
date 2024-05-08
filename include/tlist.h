@@ -18,39 +18,39 @@ public:
 
 	// конструкторы, деструктор и операторы копирования
 
-	virtual TList();
-	virtual TList(const T& _val);
-	virtual TList(TList<T>& _list);
-	virtual ~TList();
+	TList();
+	TList(const T& _val);
+	TList(TList<T>& _list);
+	~TList();
 
-	virtual TList<T>& operator=(const T& _val);
-	virtual TList<T>& operator=(TList<T>& _list);
+	TList<T>& operator=(const T& _val);
+	TList<T>& operator=(TList<T>& _list);
 
 	// втсавка или удаление звена
 
-	virtual void InsFirst(const T& _val);
-	virtual void InsLast(const T& _val);
-	virtual void InsCurr(const T& _val);
-	virtual void DelFirst();
-	virtual void DelCurr();
+	void InsFirst(const T& _val);
+	void InsLast(const T& _val);
+	void InsCurr(const T& _val);
+	void DelFirst();
+	void DelCurr();
 
 	// методы доступа к pCurr; итераторы
 
-	virtual const TNode<T>* GetCurr() const;							// доступ к pCurr значению
-	virtual void SetPos(const int _pos);								// установить значение pCurr в зависимости от позиция _pos
-	virtual void Reset();										// установить pCurr на начало списка
-	virtual void GoNext();										// перейти к следующему звену
-	virtual bool IsEnd() const noexcept;
+	const TNode<T>* GetCurr() const;							// доступ к pCurr значению
+	void SetPos(const int _pos);								// установить значение pCurr в зависимости от позиция _pos
+	void Reset();										// установить pCurr на начало списка
+	void GoNext();										// перейти к следующему звену
+	bool IsEnd() const noexcept;
 
 	// другие методы
 					
-	virtual void DelList();
-	virtual int GetLength() const noexcept;
+	void DelList();
+	int GetLength() const noexcept;
 
 	// comparison operators
 
-	virtual bool operator==(TList<T>& _list);
-	virtual bool operator!=(TList<T>& _list);
+	bool operator==(TList<T>& _list);
+	bool operator!=(TList<T>& _list);
 };
 
 // CONSTRUCTORS & DESTRUCTOR
@@ -169,8 +169,6 @@ TList<T>& TList<T>::operator=(TList<T>& in) {
 		in.GoNext();
 	}
 
-	this->pStop = in.pStop;
-
 	return *this;
 }
 
@@ -223,7 +221,7 @@ bool TList<T>::operator!=(TList<T>& l) { return this->operator==(l); }
 template <class T>
 void TList<T>::InsFirst(const T& val) {
 	TNode<T>* addNode = new TNode<T>{ val, pFirst };
-
+	
 	pFirst = addNode;
 	++length;
 

@@ -1,26 +1,14 @@
 #include <iostream>
-#include <locale>
-#include "../include/tlist.h"
+#include "../include/theadlist.h"
+#include "headersamples.h"
 
 using std::cout;
 using std::endl;
 
-void sample_list();
-
-int main() {
+void sample_headlist()
+{
 	setlocale(LC_CTYPE, "Russian");
 
-	const std::string line = "==========";
-
-	cout << line << " BEGIN - SAMPLE LIST \t" << line << endl;
-	sample_list();
-	cout << line << " END - SAMPLE LIST \t" << line << endl;
-
-
-	return 0;
-}
-
-void sample_list() {
 	const int SIZE = 5;
 	double D[SIZE] = { 345.66, -12.55645, 10000.099, 98.00, -5763.59018 };
 
@@ -29,7 +17,7 @@ void sample_list() {
 		list.InsLast(D[i]);
 
 
-	cout << "длина списка:\t" << (SIZE == list.GetLength()) << endl;
+	cout << "длина списка:\t\t" << (SIZE == list.GetLength()) << endl;
 
 	cout << "правильный порядок:\t";
 	int i = 0;
