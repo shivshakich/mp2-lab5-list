@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../include/theadring.h"
-#include "headersamples.h"
+#include "../include/headersamples.h"
 
 using std::cout;
 using std::endl;

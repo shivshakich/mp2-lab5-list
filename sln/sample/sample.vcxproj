@@ -145,7 +145,7 @@
     <ClCompile Include="..\..\sample\sample_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\sample\headersamples.h" />
+    <ClInclude Include="..\..\include\headersamples.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

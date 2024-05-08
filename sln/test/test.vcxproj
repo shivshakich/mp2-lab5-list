@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\test\test_main.cpp" />
     <ClCompile Include="..\..\test\test_theadlist.cpp" />
     <ClCompile Include="..\..\test\test_tlist.cpp" />
+    <ClCompile Include="..\..\test\test_tpolynom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\gtest\gtest.vcxproj">
