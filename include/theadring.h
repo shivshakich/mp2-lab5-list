@@ -3,7 +3,7 @@
 #include "tlist.h"
 
 // Кольцевой список с головой, наследуемый от TList<T>
-template <class T> class THeadList : public TList<T> {
+template <class T> class THeadRing : public TList<T> {
 protected:
 	TNode<T>* pHead;
 
@@ -15,18 +15,18 @@ protected:
 	using TList<T>::length;
 	using TList<T>::pos;
 public:
-	THeadList();
-	THeadList(const T& val);
-	THeadList(TList<T>& l);
-	THeadList(THeadList<T>& hl);
-	~THeadList();
+	THeadRing();
+	THeadRing(const T& val);
+	THeadRing(TList<T>& l);
+	THeadRing(THeadRing<T>& hl);
+	~THeadRing();
 
-	THeadList<T>& operator=(const T& _val);
-	THeadList<T>& operator=(TList<T>& _list);
-	THeadList<T>& operator=(THeadList<T>& _list);
+	THeadRing<T>& operator=(const T& _val);
+	THeadRing<T>& operator=(TList<T>& _list);
+	THeadRing<T>& operator=(THeadRing<T>& _list);
 
-	bool operator==(THeadList<T>& _list);
-	bool operator!=(THeadList<T>& _list);
+	bool operator==(THeadRing<T>& _list);
+	bool operator!=(THeadRing<T>& _list);
 
 	void InsFirst(const T& val);
 	using TList<T>::InsLast;
@@ -45,7 +45,7 @@ public:
 // CONSTRUCTORS & DESTRUCTORS
 
 template <class T>
-THeadList<T>::THeadList() {
+THeadRing<T>::THeadRing() {
 	pHead = new TNode<T>;
 	pHead->pNext = pHead;
 	pStop = pFirst = pLast = pCurr = pPrev = pHead;
@@ -54,7 +54,7 @@ THeadList<T>::THeadList() {
 }
 
 template <class T>
-THeadList<T>::THeadList(const T& val) {
+THeadRing<T>::THeadRing(const T& val) {
 	pHead = new TNode<T>;
 	pHead->pNext = pFirst = pLast = new TNode<T>{ val, pHead };
 	pCurr = pPrev = pStop = pHead;
@@ -63,7 +63,7 @@ THeadList<T>::THeadList(const T& val) {
 }
 
 template <class T>
-THeadList<T>::THeadList(TList<T>& l)
+THeadRing<T>::THeadRing(TList<T>& l)
 {
 	TList<T>::TList(l);
 	pHead = new TNode<T>;
@@ -74,7 +74,7 @@ THeadList<T>::THeadList(TList<T>& l)
 }
 
 template <class T> 
-THeadList<T>::THeadList(THeadList<T>& hl) 
+THeadRing<T>::THeadRing(THeadRing<T>& hl) 
 {
 	pHead = new TNode<T>;
 	pStop = pHead;
@@ -95,7 +95,7 @@ THeadList<T>::THeadList(THeadList<T>& hl)
 }
 
 template <class T> 
-THeadList<T>::~THeadList()
+THeadRing<T>::~THeadRing()
 {
 	TList<T>::DelList();
 	delete pHead;
@@ -104,7 +104,7 @@ THeadList<T>::~THeadList()
 // OPERATOR=
 
 template <class T>
-THeadList<T>& THeadList<T>::operator=(const T& val) 
+THeadRing<T>& THeadRing<T>::operator=(const T& val) 
 {
 	TList<T>::DelList();
 	pFirst = pLast = pHead->pNext = new TNode<T>{ val, pHead };
@@ -115,7 +115,7 @@ THeadList<T>& THeadList<T>::operator=(const T& val)
 }
 
 template <class T>
-THeadList<T>& THeadList<T>::operator=(TList<T>& l)
+THeadRing<T>& THeadRing<T>::operator=(TList<T>& l)
 {
 	this->TList<T>::operator=(l);
 
@@ -126,7 +126,7 @@ THeadList<T>& THeadList<T>::operator=(TList<T>& l)
 }
 
 template <class T>
-THeadList<T>& THeadList<T>::operator=(THeadList<T>& hl)
+THeadRing<T>& THeadRing<T>::operator=(THeadRing<T>& hl)
 {
 	const int LEN = hl.length;
 	while (length > LEN)
@@ -145,7 +145,7 @@ THeadList<T>& THeadList<T>::operator=(THeadList<T>& hl)
 // COMPARISON OPERATORS
 
 template <class T>
-bool THeadList<T>::operator==(THeadList<T>& l)
+bool THeadRing<T>::operator==(THeadRing<T>& l)
 {
 	if (this == &l)
 		return true;
@@ -162,20 +162,20 @@ bool THeadList<T>::operator==(THeadList<T>& l)
 }
 
 template <class T>
-bool THeadList<T>::operator!=(THeadList<T>& l) {
+bool THeadRing<T>::operator!=(THeadRing<T>& l) {
 	return !this->operator==(l);
 }
 
 // INSERT AND DELETE METHODS
 
 template <class T>
-void THeadList<T>::InsFirst(const T& val) {
+void THeadRing<T>::InsFirst(const T& val) {
 	TList<T>::InsFirst(val);
 	pHead->pNext = pFirst;
 }
 
 template <class T>
-void THeadList<T>::DelFirst()
+void THeadRing<T>::DelFirst()
 {
 	TList<T>::DelFirst();
 	pHead->pNext = pFirst;
