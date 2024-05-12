@@ -7,7 +7,7 @@ using std::ostream;
 using std::istream;
 using std::string;
 
-// monom: coeff * x^indx * y^indy * z*indz; index = indx * 100 + indy * 10 + indz
+// monom: coeff * x^indx * y^indy * z^indz
 struct TMonom {
 	double coeff;
 	int indX = 0, indY = 0, indZ = 0;

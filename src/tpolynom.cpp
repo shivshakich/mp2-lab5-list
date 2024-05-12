@@ -170,7 +170,6 @@ TPolynom::TPolynom(double _c, int _x, int _y, int _z)
 	if (_c != 0.0) {
 		TMonom addMonom = { _c, _x, _y, _z };
 		this->THeadRing::THeadRing(addMonom);
-
 	}
 	pHead->value = { 0.0 };
 }
@@ -265,11 +264,8 @@ TPolynom::TPolynom(const string& _str)
 
 			if (op == '-') mon.coeff = -mon.coeff;
 
-			if (mon.coeff != 0.0) {
-				TPolynom pol(mon);
-				this->operator+=(pol);
-			}
-
+			*this += mon;
+			
 			firstPos = pos + 1;
 			lastPos = NOVALUE;
 			op = letter;
@@ -293,14 +289,11 @@ TPolynom::TPolynom(const string& _str)
 
 		if (op == '-') mon.coeff = -mon.coeff;
 
-		if (mon.coeff != 0.0) {
-			TPolynom pol(mon);
-			this->operator+=(pol);
-		}
+		*this += mon;
 	}
 }
 
-TPolynom::~TPolynom() {}
+TPolynom::~TPolynom() { this->THeadRing::~THeadRing(); }
 
 // OPERATOR=
 
@@ -342,8 +335,7 @@ TPolynom& TPolynom::operator=(TPolynom&& _polynom)
 
 TPolynom& TPolynom::operator=(const string& _str)
 {
-	TPolynom pol(_str);
-	return (*this = pol);
+	return (*this = TPolynom(_str));
 }
 
 // ARITHMETIC METHODS WITH TMONOM
@@ -368,7 +360,8 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 		char compare = CompareThree(xm, ym, zm, x, y, z);
 
 		if (compare == '=') {
-			this->pCurr->value.coeff += _monom.coeff;
+			double c = (this->pCurr->value.coeff += _monom.coeff);
+			if (c == 0.0) this->DelCurr();
 			break;
 		}
 		else if (compare == '<') {
@@ -385,8 +378,6 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 
 TPolynom& TPolynom::operator-=(const TMonom& _monom) 
 {
-	if (_monom.coeff == 0.0) return *this;
-
 	TMonom oppositeMonom = { -_monom.coeff, _monom.indX, _monom.indY, _monom.indZ };
 	*this += oppositeMonom;
 	return *this;
