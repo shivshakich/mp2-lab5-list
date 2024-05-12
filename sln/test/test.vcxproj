@@ -28,6 +28,12 @@
     <ProjectReference Include="..\gtest\gtest.vcxproj">
       <Project>{9735388e-1d73-439f-ac01-fa4c0de8085d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\polynom\polynom.vcxproj">
+      <Project>{9b175ba0-fcc3-4bef-b5b1-97509349b728}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TList\TList.vcxproj">
+      <Project>{c8564fc5-211b-4318-a5b2-4d29beb674ef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

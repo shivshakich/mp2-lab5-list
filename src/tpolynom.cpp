@@ -20,32 +20,30 @@ static bool InStr(const string& _str, const char& _letter)
 }
 
 // преобразование строки в моном; возращает true при успешном преобразовании
-static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _monom) 
+static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _monom)
 {
 	double c = 1.0;
 	int x = 0, y = 0, z = 0;
 	bool wasX = false, wasY = false, wasZ = false;
 
-	const char NOTHING	= '\0';
-	const char DIGIT	= '1';
-	const char MULT		= '*';
-	const char EXP		= '^';
-	const char VAR		= 'a';
+	const char NOTHING = '\0';
+	const char DIGIT = '1';
+	const char MULT = '*';
+	const char VAR = 'a';
 	char lastLetter = NOTHING;
 
 	// избавляемся от пробелов в начале
-	for (; firstPos <= lastPos && _str[firstPos] == ' '; ++firstPos) ;
+	for (; firstPos <= lastPos && _str[firstPos] == ' '; ++firstPos)
+		;
 
 	size_t len;
-	double temp = std::stod(_str.substr(firstPos, lastPos - firstPos + 1), &len);
-	if (len != 0) {
-		if (temp < 0.0) return false;
-		
-		c = temp;
+
+	if ('0' <= _str[firstPos] && _str[firstPos] <= '9') {
+		c = std::stod(_str.substr(firstPos, lastPos - firstPos + 1), &len);
+		firstPos = firstPos + len;
 		lastLetter = DIGIT;
 	}
 
-	firstPos += len;
 	for (int i = firstPos; i <= lastPos; ++i) {
 		char letter = _str[i];
 
@@ -64,7 +62,7 @@ static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _mono
 				// получили число (int)n, занимающее len символов в строке str;
 
 				if (len == 0) return false;
-
+				i += len+1;
 				x = n;
 				lastLetter = DIGIT;
 			}
@@ -87,7 +85,7 @@ static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _mono
 				// получили число (int)n, занимающее len символов в строке str;
 
 				if (len == 0) return false;
-
+				i += len+1;
 				y = n;
 				lastLetter = DIGIT;
 			}
@@ -110,7 +108,7 @@ static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _mono
 				// получили число (int)n, занимающее len символов в строке str;
 
 				if (len == 0) return false;
-
+				i += len+1;
 				z = n;
 				lastLetter = DIGIT;
 			}
@@ -128,7 +126,7 @@ static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _mono
 		else return false;
 	}
 
-	if (lastLetter == MULT) return false;
+	if (lastLetter != DIGIT && lastLetter != VAR) return false;
 	else if (lastLetter == NOTHING) *_monom = { 0.0, 0, 0, 0 };
 	else *_monom = { c, x, y, z };
 
@@ -228,8 +226,10 @@ TPolynom::TPolynom(const string& _str)
 
 		if (letter == ' ') continue;
 
-		if (letter == '-' || letter == '+') 
+		if (letter == '-' || letter == '+') {
 			op = letter;
+			++pos;
+		}
 		else if (InStr(VALIDCHARACTERS.substr(5), letter)) 	// VALIDCHARACTERS.substr(5) == "0123456789xXyYzZ"
 			op = '+';
 		else {
@@ -237,7 +237,6 @@ TPolynom::TPolynom(const string& _str)
 			throw exc;
 		}
 
-		++pos;
 		firstPos = pos;
 		break;
 	}
@@ -293,7 +292,7 @@ TPolynom::TPolynom(const string& _str)
 	}
 }
 
-TPolynom::~TPolynom() { this->THeadRing::~THeadRing(); }
+TPolynom::~TPolynom() { /*this->THeadRing::~THeadRing();*/ }
 
 // OPERATOR=
 
@@ -361,7 +360,6 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 
 		if (compare == '=') {
 			double c = (this->pCurr->value.coeff += _monom.coeff);
-			if (c == 0.0) this->DelCurr();
 			break;
 		}
 		else if (compare == '<') {
@@ -372,6 +370,14 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 
 	// либо this изначально пустой, либо _monom нужно вставлять в конец
 	if (this->IsEnd()) this->InsLast(_monom);
+
+	int pos = 0;
+	for (this->Reset(); !this->IsEnd();) {
+		const TMonom* p = &this->GetCurr()->value;
+
+		if (p->coeff == 0.0) this->DelCurr();
+		else this->GoNext();
+	}
 
 	return *this;
 }
