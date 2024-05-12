@@ -2,8 +2,10 @@
 #include <exception>
 #include "../include/tpolynom.h"
 
+#define _NAME_OF_ARG(ARG) #ARG
+
 // допустимые символы для написания полинома
-static const string VALIDCHARACTERS = "*^.-+0123456789xXyYzZ";
+static const string VALIDCHARACTERS = "*^.-+0123456789xXyYzZ";		// зачем это нужно?
 
 // проверка на принадлежность символа _letter строке _str
 static bool InStr(const string& _str, const char& _letter)
@@ -20,7 +22,117 @@ static bool InStr(const string& _str, const char& _letter)
 // преобразование строки в моном; возращает true при успешном преобразовании
 static bool ToMonom(const string& _str, int firstPos, int lastPos, TMonom* _monom) 
 {
+	double c = 1.0;
+	int x = 0, y = 0, z = 0;
+	bool wasX = false, wasY = false, wasZ = false;
 
+	const char NOTHING	= '\0';
+	const char DIGIT	= '1';
+	const char MULT		= '*';
+	const char EXP		= '^';
+	const char VAR		= 'a';
+	char lastLetter = NOTHING;
+
+	// избавляемся от пробелов в начале
+	for (; firstPos <= lastPos && _str[firstPos] == ' '; ++firstPos) ;
+
+	size_t len;
+	double temp = std::stod(_str.substr(firstPos, lastPos - firstPos + 1), &len);
+	if (len != 0) {
+		if (temp < 0.0) return false;
+		
+		c = temp;
+		lastLetter = DIGIT;
+	}
+
+	firstPos += len;
+	for (int i = firstPos; i <= lastPos; ++i) {
+		char letter = _str[i];
+
+		if (letter == ' ') continue;
+
+		if (letter == 'x' || letter == 'X') {
+			if (lastLetter != NOTHING && lastLetter != '*') return false;
+			else if (wasX) return false;
+
+			wasX = true;
+
+			if (i + 1 <= lastPos && _str[i + 1] == '^') {
+				if (i + 2 > lastPos) return false;
+
+				int n = std::stoi(_str.substr(i + 2, lastPos - i - 1), &len);
+				// получили число (int)n, занимающее len символов в строке str;
+
+				if (len == 0) return false;
+
+				x = n;
+				lastLetter = DIGIT;
+			}
+			else {
+				lastLetter = VAR;
+				x = 1;
+			}
+		}
+
+		else if (letter == 'y' || letter == 'Y') {
+			if (lastLetter != NOTHING && lastLetter != '*') return false;
+			else if (wasY) return false;
+
+			wasY = true;
+
+			if (i + 1 <= lastPos && _str[i + 1] == '^') {
+				if (i + 2 > lastPos) return false;
+
+				int n = std::stoi(_str.substr(i + 2, lastPos - i - 1), &len);
+				// получили число (int)n, занимающее len символов в строке str;
+
+				if (len == 0) return false;
+
+				y = n;
+				lastLetter = DIGIT;
+			}
+			else {
+				lastLetter = VAR;
+				y = 1;
+			}
+		}
+
+		else if (letter == 'z' || letter == 'Z') {
+			if (lastLetter != NOTHING && lastLetter != '*') return false;
+			else if (wasZ) return false;
+
+			wasZ = true;
+
+			if (i + 1 <= lastPos && _str[i + 1] == '^') {
+				if (i + 2 > lastPos) return false;
+
+				int n = std::stoi(_str.substr(i + 2, lastPos - i - 1), &len);
+				// получили число (int)n, занимающее len символов в строке str;
+
+				if (len == 0) return false;
+
+				z = n;
+				lastLetter = DIGIT;
+			}
+			else {
+				lastLetter = VAR;
+				z = 1;
+			}
+		}
+
+		else if (letter == '*') {
+			if (lastLetter != DIGIT && lastLetter != VAR) return false;
+			lastLetter = MULT;
+		}
+
+		else return false;
+	}
+
+	if (lastLetter == MULT) return false;
+	else if (lastLetter == NOTHING) *_monom = { 0.0, 0, 0, 0 };
+	else *_monom = { c, x, y, z };
+
+	return true;
 }
 
 // сравнение тройки чисел (x1,y1,z1) с тройкой чисел (x2,y2,z2)
@@ -55,9 +167,11 @@ TPolynom::TPolynom(double _c, int _x, int _y, int _z)
 			throw exc;
 		}
 
-	TMonom addMonom = { _c, _x, _y, _z};
-	this->THeadRing::THeadRing(addMonom);
+	if (_c != 0.0) {
+		TMonom addMonom = { _c, _x, _y, _z };
+		this->THeadRing::THeadRing(addMonom);
 
+	}
 	pHead->value = { 0.0 };
 }
 
@@ -71,8 +185,8 @@ TPolynom::TPolynom(const TMonom& _monom)
 			std::exception exc("constructor TPolynom(const TMonom&) : index входящего монома имеет неправильное значение");
 			throw exc;
 		}
-
-	this->THeadRing::THeadRing(_monom);
+	
+	if (_monom.coeff != 0.0) this->THeadRing::THeadRing(_monom);
 
 	pHead->value = { 0.0 };
 }
@@ -82,6 +196,19 @@ TPolynom::TPolynom(TPolynom& _polynom)
 	this->THeadRing::THeadRing(_polynom);
 
 	pHead->value = { 0.0 };
+}
+
+TPolynom::TPolynom(TPolynom&& _polynom)
+{
+	this->TPolynom::TPolynom();
+	std::swap(this->pHead, _polynom.pHead);
+	std::swap(this->pStop, _polynom.pStop);
+	std::swap(this->pFirst, _polynom.pFirst);
+	std::swap(this->pLast, _polynom.pLast);
+	std::swap(this->pCurr, _polynom.pCurr);
+	std::swap(this->pPrev, _polynom.pPrev);
+	std::swap(this->length, _polynom.length);
+	std::swap(this->pos, _polynom.pos);
 }
 
 TPolynom::TPolynom(const string& _str)
@@ -108,6 +235,7 @@ TPolynom::TPolynom(const string& _str)
 			op = '+';
 		else {
 			std::exception exc("TPolynom(const string&) : неправильная входящая строка");
+			throw exc;
 		}
 
 		++pos;
@@ -129,11 +257,18 @@ TPolynom::TPolynom(const string& _str)
 				std::exception exc("constructor Tpolynom(const string&) : не удалось преобразовать подстроку в моном");
 				throw exc;
 			}
+			for (int i : {mon.indX, mon.indY, mon.indZ}) 
+				if (i < MINDEGREE || i > MAXDEGREE) {
+					std::exception exc("TPolynom(const string&) : степень одной из переменной принимает не правильное значение");
+					throw exc;
+				}
 
 			if (op == '-') mon.coeff = -mon.coeff;
 
-			TPolynom pol(mon);
-			this->operator+=(pol);
+			if (mon.coeff != 0.0) {
+				TPolynom pol(mon);
+				this->operator+=(pol);
+			}
 
 			firstPos = pos + 1;
 			lastPos = NOVALUE;
@@ -150,11 +285,18 @@ TPolynom::TPolynom(const string& _str)
 			std::exception exc("constructor Tpolynom(const string&) : не удалось преобразовать подстроку в моном");
 			throw exc;
 		}
+		for (int i : {mon.indX, mon.indY, mon.indZ})
+			if (i < MINDEGREE || i > MAXDEGREE) {
+				std::exception exc("TPolynom(const string&) : степень одной из переменной принимает не правильное значение");
+				throw exc;
+			}
 
 		if (op == '-') mon.coeff = -mon.coeff;
 
-		TPolynom pol(mon);
-		this->operator+=(pol);
+		if (mon.coeff != 0.0) {
+			TPolynom pol(mon);
+			this->operator+=(pol);
+		}
 	}
 }
 
@@ -172,13 +314,29 @@ TPolynom& TPolynom::operator=(const TMonom& _monom)
 			throw exc;
 		}
 
-	this->THeadRing::operator=(_monom);
+	if (_monom.coeff != 0.0) this->THeadRing::operator=(_monom);
+	else this->DelList();
+
 	return *this;
 }
 
 TPolynom& TPolynom::operator=(TPolynom& _polynom)
 {
 	this->THeadRing::operator=(_polynom);
+	return *this;
+}
+
+TPolynom& TPolynom::operator=(TPolynom&& _polynom)
+{
+	std::swap(this->pHead, _polynom.pHead);
+	std::swap(this->pStop, _polynom.pStop);
+	std::swap(this->pFirst, _polynom.pFirst);
+	std::swap(this->pLast, _polynom.pLast);
+	std::swap(this->pCurr, _polynom.pCurr);
+	std::swap(this->pPrev, _polynom.pPrev);
+	std::swap(this->length, _polynom.length);
+	std::swap(this->pos, _polynom.pos);
+
 	return *this;
 }
 
@@ -192,6 +350,8 @@ TPolynom& TPolynom::operator=(const string& _str)
 
 TPolynom& TPolynom::operator+=(const TMonom& _monom)
 {
+	if (_monom.coeff == 0.0) return *this;
+
 	const int COUNT = 3;
 	int degree[COUNT] = { _monom.indX, _monom.indY, _monom.indZ };
 	for (int i = 0; i < COUNT; ++i)
@@ -225,6 +385,8 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 
 TPolynom& TPolynom::operator-=(const TMonom& _monom) 
 {
+	if (_monom.coeff == 0.0) return *this;
+
 	TMonom oppositeMonom = { -_monom.coeff, _monom.indX, _monom.indY, _monom.indZ };
 	*this += oppositeMonom;
 	return *this;
@@ -232,6 +394,11 @@ TPolynom& TPolynom::operator-=(const TMonom& _monom)
 
 TPolynom& TPolynom::operator*=(const TMonom& _monom) 
 {
+	if (_monom.coeff == 0.0) {
+		this->DelList();
+		return *this;
+	}
+
 	double coeffM = _monom.coeff;
 	int xM = _monom.indX, yM = _monom.indY, zM = _monom.indZ;
 
@@ -255,6 +422,11 @@ TPolynom& TPolynom::operator*=(const TMonom& _monom)
 
 TPolynom& TPolynom::operator/=(const TMonom& _monom)
 {
+	if (_monom.coeff == 0.0) {
+		std::exception exc("TPolynom::operator*=(const TMonom&) : деление на ноль");
+		throw exc;
+	}
+
 	double coeffM = _monom.coeff;
 	int xM = _monom.indX, yM = _monom.indY, zM = _monom.indZ;
 
@@ -378,6 +550,14 @@ TPolynom& TPolynom::operator+=(TPolynom& _polynom)
 	return *this;
 }
 
+TPolynom& TPolynom::operator+=(TPolynom&& _polynom)
+{
+	for (_polynom.Reset(); !_polynom.IsEnd(); _polynom.GoNext())
+		*this += _polynom.GetCurr()->value;
+
+	return *this;
+}
+
 TPolynom& TPolynom::operator-=(TPolynom& _polynom)
 {
 	for (_polynom.Reset(); !_polynom.IsEnd(); _polynom.GoNext())
@@ -395,6 +575,130 @@ TPolynom& TPolynom::operator*=(TPolynom& _polynom)
 	for (copyPol.Reset(); !copyPol.IsEnd(); copyPol.GoNext()) {
 		TMonom mon = copyPol.GetCurr()->value;
 
-		*this += _polynom * mon;
+		*this += _polynom * mon;			// здесь, (_polynom * mon) - rvalue объект, поэтому необходим метод operator+=(TPolynom&&)
 	}
+
+	return *this;
+}
+
+TPolynom TPolynom::operator+(TPolynom& _polynom)
+{
+	TPolynom res(*this);
+	res += _polynom;
+	return res;
+}
+
+TPolynom TPolynom::operator-(TPolynom& _polynom)
+{
+	TPolynom res(*this);
+	res -= _polynom;
+	return res;
+}
+
+TPolynom TPolynom::operator*(TPolynom& _polynom)
+{
+	TPolynom res(*this);
+	res *= _polynom;
+	return res;
+}
+
+// COMPARE METHODS
+
+bool TPolynom::operator==(TPolynom& _polynom)
+{
+	if (this == &_polynom) return true;
+
+	bool res = this->GetLength() == _polynom.GetLength();
+
+	if (!res) return false;
+
+	for (this->Reset(), _polynom.Reset(); !this->IsEnd() && res; this->GoNext(), _polynom.GoNext()) {
+		const TMonom	*p1 = &this->GetCurr()->value, 
+						*p2 = &_polynom.GetCurr()->value;
+
+		res = (p1->coeff == p2->coeff) && (p1->indX == p2->indX) && (p1->indY == p2->indY) && (p1->indZ == p2->indZ);
+	}
+
+	return res;
+}
+
+bool TPolynom::operator!=(TPolynom& _polynom)
+{
+	return !this->operator==(_polynom);
+}
+
+// OHTER METHODS : TOSTRING
+
+string TPolynom::ToString()
+{
+	string res = "";
+
+	for (this->Reset(); !this->IsEnd(); this->GoNext()) {
+		const TMonom* p = &this->GetCurr()->value;
+		double c = p->coeff;
+		int x = p->indX, y = p->indY, z = p->indZ;
+
+		if (c > 0.0) res += '+';
+		res += std::to_string(c);
+
+		for (int i : {x, y, z}) {
+			if (i > 0) res += '*' + _NAME_OF_ARG(i) + '^' + std::to_string(i);
+			else if (i < 0) res += '*' + _NAME_OF_ARG(i) + '^' + '(' + std::to_string(i) + ")";
+		}
+	}
+
+	return res;
+}
+
+bool CheckOrder(TPolynom& _pol) 
+{
+	if (_pol.GetLength() == 0) return true;
+
+	bool res = true;
+	const int COUNT = 3;
+	int prevDegree[COUNT], currDegree[COUNT];
+
+	_pol.Reset();
+	TMonom* p = &_pol.pCurr->value;
+	prevDegree[0] = p->indX; 
+	prevDegree[1] = p->indY; 
+	prevDegree[2] = p->indZ;
+	_pol.GoNext();
+
+	for (; !_pol.IsEnd() && res; _pol.GoNext()) {
+		p = &_pol.pCurr->value;
+		currDegree[0] = p->indX;
+		currDegree[1] = p->indY;
+		currDegree[2] = p->indZ;
+
+		char compare = CompareThree(prevDegree[0], prevDegree[1], prevDegree[2], currDegree[0], currDegree[1], currDegree[2]);
+		res = compare == '<';
+
+		prevDegree[0] = p->indX;
+		prevDegree[1] = p->indY;
+		prevDegree[2] = p->indZ;
+	}
+
+	return res;
+}
+
+// OPERATOR<< & OPERATOR>>
+
+ostream& operator<<(ostream& os, TPolynom& pol) 
+{
+	os << pol.ToString();
+	return os;
+}
+
+istream& operator>>(istream& is, TPolynom& pol)
+{
+	string str = "";
+	char letter;
+
+	for (is >> letter; letter != '\0' && letter != '\t' && letter != '\n' && letter != EOF; is >> letter)
+		str += letter;
+
+	pol = TPolynom(str);
+
+	return is;
 }

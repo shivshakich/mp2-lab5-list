@@ -24,11 +24,13 @@ public:
 	TPolynom(double _coeff, int _x = 0, int _y = 0, int _z = 0);
 	TPolynom(const TMonom& _monom);
 	TPolynom(TPolynom& _polynom);
+	TPolynom(TPolynom&& _polynom);
 	TPolynom(const string& _str);
 	~TPolynom();
 
 	TPolynom& operator=(const TMonom& _monom);
 	TPolynom& operator=(TPolynom& _polynom);
+	TPolynom& operator=(TPolynom&& _polynom);
 	TPolynom& operator=(const string& _str);
 
 	TPolynom& operator+=(const TMonom&);
@@ -41,6 +43,7 @@ public:
 	TPolynom operator/(const TMonom&);
 
 	TPolynom& operator+=(TPolynom&);
+	TPolynom& operator+=(TPolynom&&);
 	TPolynom& operator-=(TPolynom&);
 	TPolynom& operator*=(TPolynom&);
 	TPolynom operator+(TPolynom&);
@@ -51,6 +54,7 @@ public:
 	bool operator!=(TPolynom& _polynom);
 
 	string ToString();
+	friend bool CheckOrder(TPolynom& _pol);
 
 	friend ostream& operator<<(ostream& os, TPolynom& _polynom);
 	friend istream& operator>>(istream& is, TPolynom& _polynom);

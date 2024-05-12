@@ -42,7 +42,7 @@ public:
 	using TList<T>::GetLength;
 };
 
-// CONSTRUCTORS & DESTRUCTORS
+// CONSTRUCTORS & DESTRUCTOR
 
 template <class T>
 THeadRing<T>::THeadRing() {
