@@ -99,8 +99,7 @@ bool AppPolynom::Perform()
 		case '*': vec[l - 1] *= vec[r - 1]; break;
 		case '/':
 			if (vec[r - 1].GetLength() != 1) throw "";
-			const TMonom* p = &vec[r - 1].GetCurr()->value;
-			vec[l - 1] /= *p;
+			vec[l - 1] /= vec[r - 1].GetCurr()->value;
 			break;
 		case '=': 
 			if (rnum == zero) {
