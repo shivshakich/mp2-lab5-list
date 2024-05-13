@@ -31,7 +31,7 @@ static TPolynom POL[LEN2] = {
 	TPolynom(1.0, 1) + TMonom{1.0, 0,1}, TPolynom(1.0, 1) - TMonom{1.0, 0,1},			/* 34-35 */
 	TPolynom(1.0, 0, 1) - TMonom{50.4999, 0,0,1}, TPolynom(-4.0, 2,2,2),				/* 36-37 */
 	TPolynom(), TPolynom(12.43, 7) + TMonom{1.0, 8} - TMonom{1.0, 0,0,12},				/* 38-39 */
-	TPolynom(1.0, 0,0,1)																/* 40 */
+	TPolynom(1.0, 0,0,2)																/* 40 */
 };
 
 static const size_t SIZE2 = 14;
@@ -107,7 +107,11 @@ TEST(TPolynom, polynom_created_by_string_conversion_constructor_has_correct_valu
 		//string sss = S1[i];
 		TPolynom pol(S1[i]);
 		//int n = pol.GetLength();
-		//if (n == 1) { pol.Reset(); const TMonom* p = &pol.GetCurr()->value; }
+		//if (n == 1) {
+		//	pol.Reset(); const TMonom* p = &pol.GetCurr()->value;
+		//	double c = p->coeff; int x = p->indX, y = p->indY, z = p->indZ;
+		//	int a = 1;
+		//}
 		//POL[i - LEN1].Reset();
 		//const TMonom* p = &POL[i - LEN1].GetCurr()->value;
 

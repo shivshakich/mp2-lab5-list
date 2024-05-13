@@ -353,31 +353,30 @@ TPolynom& TPolynom::operator+=(const TMonom& _monom)
 
 	int xm = _monom.indX, ym = _monom.indY, zm = _monom.indZ;
 
-	for (this->Reset(); !this->IsEnd(); this->GoNext()) {
+	bool wasAdd = false;
+
+	for (this->Reset(); !this->IsEnd(); ) {
 		int x = this->pCurr->value.indX, y = this->pCurr->value.indY, z = this->pCurr->value.indZ;
 
 		char compare = CompareThree(xm, ym, zm, x, y, z);
 
 		if (compare == '=') {
 			double c = (this->pCurr->value.coeff += _monom.coeff);
+			if (c == 0.0) this->DelCurr();
+			wasAdd = true;
 			break;
 		}
 		else if (compare == '<') {
 			this->InsCurr(_monom);
+			wasAdd = true;
 			break;
 		}
+		else GoNext();
 	}
 
 	// либо this изначально пустой, либо _monom нужно вставлять в конец
-	if (this->IsEnd()) this->InsLast(_monom);
-
-	int pos = 0;
-	for (this->Reset(); !this->IsEnd();) {
-		const TMonom* p = &this->GetCurr()->value;
-
-		if (p->coeff == 0.0) this->DelCurr();
-		else this->GoNext();
-	}
+	if (!wasAdd) 
+		this->InsLast(_monom);
 
 	return *this;
 }
