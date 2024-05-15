@@ -1,27 +1,23 @@
 #pragma once
 
-#include <vector>
 #include <string>
-#include "../include/tpolynom.h"
+#include <vector>
+#include "tpolynom.h"
 
-using std::vector;
-using std::string;
-
-class AppPolynom {
-	vector<TPolynom> vec;
-	string pol, lnum, op, rnum;
-	const string zero = "NULL";
-public:
-	AppPolynom();
-
-	bool SetPOL(const string&);
-	bool SetLNUM(const string&);
-	bool SetOP(const string&);
-	bool SetRNUM(const string&);
-
-	bool AddPolynom();
-	bool DelPolynom(int pos);
-	bool Perform();
-
-	size_t GetSize() const noexcept { return vec.size(); }
+struct AppPolynom {
+	std::vector<TPolynom> vec;
+	std::string pol = "", left = "", op = "", right = "";
 };
+
+bool AddPol(AppPolynom&);
+bool DelPol(AppPolynom&, int);
+bool DelAll(AppPolynom&);
+
+bool SetPol(AppPolynom&, const string&);
+bool SetLeft(AppPolynom&, const string&);
+bool SetOp(AppPolynom&, const string&);
+bool SetRight(AppPolynom&, const string&);
+bool Perform(AppPolynom&);
+
+int GetSize(const AppPolynom& app) { return app.vec.size(); }
+bool GetPol(AppPolynom&, int, TPolynom*);

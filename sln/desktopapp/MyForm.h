@@ -1,7 +1,7 @@
 #pragma once
 
 namespace CppWinForm1 {
-
+	
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -200,7 +200,7 @@ namespace CppWinForm1 {
 	private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	std::string str = 
+	//std::string str = 
 }
 };
 }

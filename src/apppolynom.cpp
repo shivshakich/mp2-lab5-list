@@ -1,114 +1,139 @@
 #include "../include/apppolynom.h"
 
-AppPolynom::AppPolynom() : vec(), pol(""), lnum(""), op(""), rnum("") {}
-
-bool AppPolynom::SetPOL(const string& in)
+// преобразует строку pol в полином и добавляет её в конец
+bool AddPol(AppPolynom& app)
 {
-	try {
-		TPolynom(in);
-	}
-	catch (...) {
-		return false;
-	}
+	TPolynom tp;
 
-	pol = in;
+	try { tp = app.pol; }
+	catch (...) { return false; }
+
+	app.vec.push_back(tp);
+
 	return true;
 }
 
-bool AppPolynom::SetLNUM(const string& in)
+// удаляет полином на выбранной позиции
+bool DelPol(AppPolynom& app, int pos)
 {
-	int n;
-	size_t len = -1;
+	const int SIZE = GetSize(app);
 
-	try {
-		n = std::stoi(in, &len);
-	}
-	catch (...) {
-		return false;
+	if (pos < 0) return false;
+	if (pos < SIZE) {
+		for (int i = pos + 1; i < SIZE; ++i) app.vec[i - 1] = app.vec[i];
+		app.vec.pop_back();
 	}
 
-	if (n - 1 < 0 || n-1 >= GetSize()) return false;
-	lnum = in;
-	return true;
-}
-bool AppPolynom::SetOP(const string& in) {
-	if (in.size() != 1) return false;
-
-	char c = in[0];
-	bool res = (c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == '=');
-	if (res) op = in;
-
-	return res;
-}
-bool AppPolynom::SetRNUM(const string& in)
-{
-	if (in == zero) { rnum = in; return true; }
-
-	int n;
-	size_t len = -1;
-
-	try {
-		n = std::stoi(in, &len);
-	}
-	catch (...) {
-		return false;
-	}
-
-	if (n - 1 < 0 || n - 1 > GetSize()) return false;
-	rnum = in;
 	return true;
 }
 
-bool AppPolynom::AddPolynom()
+bool DelAll(AppPolynom& app)
+{
+	const int SIZE = GetSize(app);
+
+	for (int i = 0; i < SIZE; ++i) app.vec.pop_back();
+
+	return true;
+}
+
+bool SetPol(AppPolynom& app, const string& in)
+{
+	try { TPolynom tp(in); }
+	catch (...) { return false; }
+
+	app.pol = in;
+
+	return true;
+}
+
+// в левом окне может быть только цифра
+bool SetLeft(AppPolynom& app, const string& in)
 {
 	bool res = true;
+
 	try {
-		vec.push_back(TPolynom(pol));
+		size_t len;
+		int n = std::stoi(in, &len);
+
+		if (len != in.length()) throw "";
+		if (n <= 0 || n > GetSize(app)) throw "";
+
+		app.left = in;
 	}
-	catch (...) {
-		res = false;
-	}
+	catch (...) { res = false; }
 
 	return res;
 }
 
-bool AppPolynom::DelPolynom(int pos) {
-	if (pos - 1 < 0 || pos - 1 >= GetSize()) return false;
+// допустимые символы: + - * / =
+bool SetOp(AppPolynom& app, const string& in)
+{
+	bool res = false;
+	char c = in[0];
 
-	pos = pos - 1;
+	if (in.length() != 1) res = false;
+	else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '=') { app.op = in; res = true; }
+	else res = false;
 
-	if (pos == GetSize() - 1) {
-		vec.pop_back();
-		return true;
-	}
-
-	for (int i = pos + 1; i < GetSize(); ++i) {
-		vec[i - 1] = vec[i];
-	}
-	vec.pop_back();
-	return true;
+	return res;
 }
 
-bool AppPolynom::Perform()
+// в правом окне может быть только цифра
+bool SetRight(AppPolynom& app, const string& in)
 {
-	int l = std::stoi(lnum), r = std::stoi(rnum);
+	bool res = true;
+
 	try {
-		switch (op[0]) {
-		case '+': vec[l - 1] += vec[r - 1]; break;
-		case '-': vec[l - 1] -= vec[r - 1]; break;
-		case '*': vec[l - 1] *= vec[r - 1]; break;
-		case '/':
-			if (vec[r - 1].GetLength() != 1) throw "";
-			vec[l - 1] /= vec[r - 1].GetCurr()->value;
-			break;
-		case '=': 
-			if (rnum == zero) {
-				DelPolynom(l); break;
+		size_t len;
+		int n = std::stoi(in, &len);
+
+		if (len != in.length()) throw "";
+		if (n <= 0 || n > GetSize(app)) throw "";
+
+		app.right = in;
+	}
+	catch (...) { res = false; }
+
+	return res;
+}
+
+bool Perform(AppPolynom& app)
+{
+	bool res = SetLeft(app, app.left) && SetOp(app, app.op) && SetRight(app, app.right);
+
+	try {
+		if (res) {
+			int l = stoi(app.left) - 1, r = stoi(app.right) - 1;
+
+			char c = app.op[0];
+
+			switch (c) {
+			case '+': app.vec[l] += app.vec[r]; break;
+			case '-': app.vec[l] -= app.vec[r]; break;
+			case '*': app.vec[l] *= app.vec[r]; break;
+			case '/':
+				if (app.vec[r].GetLength() != 1) throw "";
+				app.vec[r].Reset();
+				app.vec[l] /= app.vec[r].GetCurr()->value;
+				break;
+			case '=':
+				app.vec[l] = app.vec[r];
 			}
-			vec[l - 1] = vec[r - 1]; break;
 		}
 	}
-	catch (...) { return false; }
-	
+	catch (...) { res = false; }
+
+	return res;
+}
+
+bool GetPol(AppPolynom& app, int pos, TPolynom* tp) {
+	bool res;
+
+	if (pos < 0 || pos >= GetSize(app)) res = false;
+	else {
+		tp = &app.vec[pos];
+		res = true;
+	}
+
 	return true;
 }
