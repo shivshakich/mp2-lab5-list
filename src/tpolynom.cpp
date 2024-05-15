@@ -292,7 +292,7 @@ TPolynom::TPolynom(const string& _str)
 	}
 }
 
-TPolynom::~TPolynom() { /*this->THeadRing::~THeadRing();*/ }
+//TPolynom::~TPolynom() { this->THeadRing::~THeadRing(); }
 
 // OPERATOR=
 

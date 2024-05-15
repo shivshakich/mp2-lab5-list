@@ -26,7 +26,7 @@ public:
 	TPolynom(TPolynom& _polynom);
 	TPolynom(TPolynom&& _polynom);
 	TPolynom(const string& _str);
-	~TPolynom();
+	//~TPolynom();
 
 	TPolynom& operator=(const TMonom& _monom);
 	TPolynom& operator=(TPolynom& _polynom);
