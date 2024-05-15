@@ -1,7 +1,12 @@
 #pragma once
 
+#include <msclr/marshal_cppstd.h>
+#include <string>
+#include <vector>
+#include "../../include/tpolynom.h"
+
 namespace CppWinForm1 {
-	
+
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -21,6 +26,11 @@ namespace CppWinForm1 {
 			//
 			//TODO: Add the constructor code here
 			//
+			vec = new std::vector<TPolynom>;
+			pol = new string;			*pol = "";
+			left = new string;			*left = "";
+			op = new string;			*op = "";
+			right = new string;			*right = "";
 		}
 
 	protected:
@@ -33,6 +43,16 @@ namespace CppWinForm1 {
 			{
 				delete components;
 			}
+
+			TPolynom* tp = new TPolynom;
+			*tp = TPolynom(1.0);
+			vec->push_back(*tp);
+
+			delete[] vec;
+			delete pol;
+			delete left;
+			delete op;
+			delete right;
 		}
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::TextBox^ textBox1;
@@ -48,11 +68,15 @@ namespace CppWinForm1 {
 
 
 	protected:
-
+		
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
+
+		std::vector<TPolynom>* vec;
+		std::string* pol, * left, * op, * right;
+
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
@@ -200,7 +224,9 @@ namespace CppWinForm1 {
 	private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	//std::string str = 
+	std::string in = msclr::interop::marshal_as< std::string >(textBox1->Text);
+
+	
 }
 };
 }
