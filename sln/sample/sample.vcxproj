@@ -143,6 +143,7 @@
     <ClCompile Include="..\..\sample\sample_headring.cpp" />
     <ClCompile Include="..\..\sample\sample_list.cpp" />
     <ClCompile Include="..\..\sample\sample_main.cpp" />
+    <ClCompile Include="..\..\sample\sample_polynom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\headersamples.h" />

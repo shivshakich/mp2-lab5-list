@@ -15,8 +15,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "samples", "sample\sample.vcxproj", "{37A5C790-FA6B-4C1A-888E-DE3C3EAAF740}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "polynom", "polynom\polynom.vcxproj", "{9B175BA0-FCC3-4BEF-B5B1-97509349B728}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_polynom", "application_polynom\application_polynom.vcxproj", "{0E228A01-44AA-4B56-B9A8-C20801DC353C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C8564FC5-211B-4318-A5B2-4D29BEB674EF} = {C8564FC5-211B-4318-A5B2-4D29BEB674EF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "desktopapp", "desktopapp\CppWinForm1.vcxproj", "{9696B190-8A31-45BA-A43E-0287102EF438}"
 EndProject
@@ -68,14 +69,6 @@ Global
 		{9B175BA0-FCC3-4BEF-B5B1-97509349B728}.Release|x64.Build.0 = Release|x64
 		{9B175BA0-FCC3-4BEF-B5B1-97509349B728}.Release|x86.ActiveCfg = Release|Win32
 		{9B175BA0-FCC3-4BEF-B5B1-97509349B728}.Release|x86.Build.0 = Release|Win32
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Debug|x64.ActiveCfg = Debug|x64
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Debug|x64.Build.0 = Debug|x64
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Debug|x86.ActiveCfg = Debug|Win32
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Debug|x86.Build.0 = Debug|Win32
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Release|x64.ActiveCfg = Release|x64
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Release|x64.Build.0 = Release|x64
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Release|x86.ActiveCfg = Release|Win32
-		{0E228A01-44AA-4B56-B9A8-C20801DC353C}.Release|x86.Build.0 = Release|Win32
 		{9696B190-8A31-45BA-A43E-0287102EF438}.Debug|x64.ActiveCfg = Debug|x64
 		{9696B190-8A31-45BA-A43E-0287102EF438}.Debug|x64.Build.0 = Debug|x64
 		{9696B190-8A31-45BA-A43E-0287102EF438}.Debug|x86.ActiveCfg = Debug|Win32

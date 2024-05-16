@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\sample\sample_headring.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sample\sample_polynom.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\headersamples.h">

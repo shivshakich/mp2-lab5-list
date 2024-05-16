@@ -106,7 +106,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies />
+      <AdditionalDependencies>advapi32.lib;kernel32.lib;user32.lib</AdditionalDependencies>
       <EntryPointSymbol>Main</EntryPointSymbol>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -151,6 +151,14 @@
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\polynom\polynom.vcxproj">
+      <Project>{9b175ba0-fcc3-4bef-b5b1-97509349b728}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\TList\TList.vcxproj">
+      <Project>{c8564fc5-211b-4318-a5b2-4d29beb674ef}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
