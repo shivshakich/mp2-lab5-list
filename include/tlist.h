@@ -3,7 +3,8 @@
 template <class T>
 struct TNode {
 	T value;
-	TNode<T>* pNext = nullptr;
+	TNode<T>* pNext;
+	TNode() { pNext = nullptr; }
 };
 
 template <class T>
@@ -220,8 +221,10 @@ bool TList<T>::operator!=(TList<T>& l) { return this->operator==(l); }
 
 template <class T>
 void TList<T>::InsFirst(const T& val) {
-	TNode<T>* addNode = new TNode<T>{ val, pFirst };
-	
+	TNode<T>* addNode = new TNode<T>;
+	addNode->value = val;
+	addNode->pNext = pFirst;
+
 	pFirst = addNode;
 	++length;
 
@@ -233,7 +236,9 @@ void TList<T>::InsFirst(const T& val) {
 
 template <class T>
 void TList<T>::InsLast(const T& val) {
-	TNode<T>* addNode = new TNode<T>{ val, pStop };
+	TNode<T>* addNode = new TNode<T>;
+	addNode->value = val;
+	addNode->pNext = pStop;
 
 	if (length == 0)
 		pFirst = pLast = addNode;
@@ -251,7 +256,10 @@ void TList<T>::InsCurr(const T& val) {
 	if (pCurr == pFirst) 
 		this->InsFirst(val);
 	else {
-		TNode<T>* pNew = new TNode<T>{ val, pCurr};
+		TNode<T>* pNew = new TNode<T>();
+		pNew->value = val;
+		pNew->pNext = pCurr;
+
 		pPrev->pNext = pNew;
 		pPrev = pNew;
 		++pos; ++length;

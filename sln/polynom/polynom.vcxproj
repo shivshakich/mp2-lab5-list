@@ -130,12 +130,12 @@
     <ClInclude Include="..\..\include\tpolynom.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\tpolynom.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\TList\TList.vcxproj">
       <Project>{c8564fc5-211b-4318-a5b2-4d29beb674ef}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\tpolynom.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

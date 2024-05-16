@@ -2,10 +2,8 @@
 #include <exception>
 #include "../include/tpolynom.h"
 
-#define _NAME_OF_ARG(ARG) #ARG
-
 // допустимые символы для написания полинома
-static const string VALIDCHARACTERS = "*^.-+0123456789xXyYzZ";		// зачем это нужно?
+//static const string VALIDCHARACTERS = "*^.-+0123456789xXyYzZ";		// зачем это нужно?
 
 // проверка на принадлежность символа _letter строке _str
 static bool InStr(const string& _str, const char& _letter)
@@ -155,6 +153,8 @@ TPolynom::TPolynom()
 
 TPolynom::TPolynom(double _c, int _x, int _y, int _z)
 {
+	this->TPolynom::TPolynom();
+
 	const int COUNT = 3;
 	int degree[COUNT] = { _x, _y, _z };
 
@@ -166,13 +166,14 @@ TPolynom::TPolynom(double _c, int _x, int _y, int _z)
 
 	if (_c != 0.0) {
 		TMonom addMonom = { _c, _x, _y, _z };
-		this->THeadRing<TMonom>::THeadRing(addMonom);
+		this->InsLast(addMonom);
 	}
-	pHead->value = { 0.0 };
 }
 
 TPolynom::TPolynom(const TMonom& _monom)
 {
+	this->TPolynom::TPolynom();
+
 	const int COUNT = 3;
 	int degree[COUNT] = { _monom.indX, _monom.indY, _monom.indZ };
 
@@ -181,10 +182,8 @@ TPolynom::TPolynom(const TMonom& _monom)
 			std::exception exc("constructor TPolynom(const TMonom&) : index входящего монома имеет неправильное значение");
 			throw exc;
 		}
-	
-	if (_monom.coeff != 0.0) this->THeadRing<TMonom>::THeadRing(_monom);
 
-	pHead->value = { 0.0 };
+	if (_monom.coeff != 0.0) this->InsLast(_monom);
 }
 
 TPolynom::TPolynom(TPolynom& _polynom)
@@ -240,7 +239,7 @@ TPolynom::TPolynom(const string& _str)
 			op = letter;
 			++pos;
 		}
-		else if (InStr(VALIDCHARACTERS.substr(5), letter)) 	// VALIDCHARACTERS.substr(5) == "0123456789xXyYzZ"
+		else if (InStr("0123456789xXyYzZ", letter)) 	// VALIDCHARACTERS.substr(5) == "0123456789xXyYzZ"
 			op = '+';
 		else {
 			std::exception exc("TPolynom(const string&) : неправильная входящая строка");

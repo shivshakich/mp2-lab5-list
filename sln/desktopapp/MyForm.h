@@ -5,8 +5,6 @@
 #include <vector>
 #include "../../include/tpolynom.h"
 
-std::vector<TPolynom> vec;
-TPolynom pol;
 
 namespace CppWinForm1 {
 
@@ -30,7 +28,6 @@ namespace CppWinForm1 {
 			//TODO: Add the constructor code here
 			//
 		}
-
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -211,7 +208,7 @@ namespace CppWinForm1 {
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	std::string in = msclr::interop::marshal_as< std::string >(textBox1->Text);
 	
-	pol = in;
+	//pol = in;
 }
 };
 }

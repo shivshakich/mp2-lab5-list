@@ -56,7 +56,10 @@ THeadRing<T>::THeadRing() {
 template <class T>
 THeadRing<T>::THeadRing(const T& val) {
 	pHead = new TNode<T>;
-	pHead->pNext = pFirst = pLast = new TNode<T>{ val, pHead };
+	pHead->pNext = pFirst = pLast = new TNode<T>();
+	pLast->value = val;
+	pLast->pNext = pHead;
+
 	pCurr = pPrev = pStop = pHead;
 	length = 1;
 	pos = -1;
@@ -107,7 +110,10 @@ template <class T>
 THeadRing<T>& THeadRing<T>::operator=(const T& val) 
 {
 	TList<T>::DelList();
-	pFirst = pLast = pHead->pNext = new TNode<T>{ val, pHead };
+	pFirst = pLast = pHead->pNext = new TNode<T>;
+	pLast->value = val;
+	pLast->pNext = pHead;
+
 	pLast->pNext = pHead;
 	++length;
 
