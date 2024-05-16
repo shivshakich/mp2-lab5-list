@@ -64,6 +64,8 @@ TEST(TPolynom, can_create_polynom) {
 TEST(TPolynom, polynom_created_by_default_constructor_has_only_head_vertex) {
 	TPolynom list;
 	ASSERT_EQ(list.GetLength(), 0);
+	ASSERT_TRUE(list.GetCurr() != nullptr);
+	ASSERT_TRUE(list.GetCurr()->pNext == list.GetCurr());
 }
 
 TEST(TPolynom, polynom_created_by_conversion_constructor_has_correct_values) {

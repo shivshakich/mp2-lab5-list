@@ -65,7 +65,7 @@ THeadRing<T>::THeadRing(const T& val) {
 template <class T>
 THeadRing<T>::THeadRing(TList<T>& l)
 {
-	TList<T>::TList(l);
+	this->TList<T>::TList(l);
 	pHead = new TNode<T>;
 	if (length == 0) pFirst = pLast = pHead;
 

@@ -17,5 +17,11 @@ int main() {
 	sample_headlist();
 	cout << line << " END - SAMPLE LIST \t" << line << endl;
 
+	cout << endl;
+
+	cout << line << " BEGIN - SAMPLE LIST \t" << line << endl;
+	sample_polynom();
+	cout << line << " END - SAMPLE LIST \t" << line << endl;
+
 	return 0;
 }

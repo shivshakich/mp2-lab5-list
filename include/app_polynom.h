@@ -7,7 +7,7 @@
 static const size_t MAXSIZE = 99;
 
 class AppPolynom {
-	std::vector<TPolynom> Arr = {TPolynom(), TPolynom()};						// указатель на начало вектора
+	std::vector<TPolynom> Arr;						// указатель на начало вектора
 public:
 	AppPolynom();
 	~AppPolynom();

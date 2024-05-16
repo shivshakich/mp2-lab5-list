@@ -9,7 +9,7 @@ using std::string;
 
 // monom: coeff * x^indx * y^indy * z^indz
 struct TMonom {
-	double coeff;
+	double coeff = 0.0;
 	int indX = 0, indY = 0, indZ = 0;
 };
 
@@ -25,13 +25,13 @@ public:
 	TPolynom(const TMonom& _monom);
 	TPolynom(TPolynom& _polynom);
 	TPolynom(const TPolynom& _polynom);
-	TPolynom(TPolynom&& _polynom);
+	TPolynom(TPolynom&& _polynom) noexcept;
 	TPolynom(const string& _str);
 	//~TPolynom();
 
 	TPolynom& operator=(const TMonom& _monom);
 	TPolynom& operator=(TPolynom& _polynom);
-	TPolynom& operator=(TPolynom&& _polynom);
+	TPolynom& operator=(TPolynom&& _polynom) noexcept;
 	TPolynom& operator=(const string& _str);
 
 	TPolynom& operator+=(const TMonom&);

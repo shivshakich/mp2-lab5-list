@@ -149,7 +149,7 @@ static char CompareThree(int x1, int y1, int z1, int x2, int y2, int z2)
 
 TPolynom::TPolynom()
 {
-	this->THeadRing::THeadRing();
+	this->THeadRing<TMonom>::THeadRing();
 	pHead->value = { 0.0 };
 }
 
@@ -166,7 +166,7 @@ TPolynom::TPolynom(double _c, int _x, int _y, int _z)
 
 	if (_c != 0.0) {
 		TMonom addMonom = { _c, _x, _y, _z };
-		this->THeadRing::THeadRing(addMonom);
+		this->THeadRing<TMonom>::THeadRing(addMonom);
 	}
 	pHead->value = { 0.0 };
 }
@@ -182,14 +182,14 @@ TPolynom::TPolynom(const TMonom& _monom)
 			throw exc;
 		}
 	
-	if (_monom.coeff != 0.0) this->THeadRing::THeadRing(_monom);
+	if (_monom.coeff != 0.0) this->THeadRing<TMonom>::THeadRing(_monom);
 
 	pHead->value = { 0.0 };
 }
 
 TPolynom::TPolynom(TPolynom& _polynom)
 {
-	this->THeadRing::THeadRing(_polynom);
+	this->THeadRing<TMonom>::THeadRing(_polynom);
 
 	pHead->value = { 0.0 };
 }
@@ -205,7 +205,7 @@ TPolynom::TPolynom(const TPolynom& _polynom) {
 		this->InsLast(p->value);
 }
 
-TPolynom::TPolynom(TPolynom&& _polynom)
+TPolynom::TPolynom(TPolynom&& _polynom) noexcept
 {
 	this->TPolynom::TPolynom();
 	std::swap(this->pHead, _polynom.pHead);
@@ -316,7 +316,7 @@ TPolynom& TPolynom::operator=(const TMonom& _monom)
 			throw exc;
 		}
 
-	if (_monom.coeff != 0.0) this->THeadRing::operator=(_monom);
+	if (_monom.coeff != 0.0) this->THeadRing<TMonom>::operator=(_monom);
 	else this->DelList();
 
 	return *this;
@@ -324,11 +324,11 @@ TPolynom& TPolynom::operator=(const TMonom& _monom)
 
 TPolynom& TPolynom::operator=(TPolynom& _polynom)
 {
-	this->THeadRing::operator=(_polynom);
+	this->THeadRing<TMonom>::operator=(_polynom);
 	return *this;
 }
 
-TPolynom& TPolynom::operator=(TPolynom&& _polynom)
+TPolynom& TPolynom::operator=(TPolynom&& _polynom) noexcept
 {
 	std::swap(this->pHead, _polynom.pHead);
 	std::swap(this->pStop, _polynom.pStop);
@@ -637,20 +637,37 @@ bool TPolynom::operator!=(TPolynom& _polynom)
 
 string TPolynom::ToString()
 {
+	if (this->GetLength() == 0) 
+		return "0.0";
+
+	double c;
+	int x, y, z;
 	string res = "";
 
 	for (this->Reset(); !this->IsEnd(); this->GoNext()) {
 		const TMonom* p = &this->GetCurr()->value;
-		double c = p->coeff;
-		int x = p->indX, y = p->indY, z = p->indZ;
+
+		c = p->coeff;
+		x = p->indX;
+		y = p->indY;
+		z = p->indZ;
 
 		if (c > 0.0) res += '+';
 		res += std::to_string(c);
+		
+		if (x < 0) res += "*x^(" + std::to_string(x) + ")";
+		else if (x == 1) res += "*x";
+		else if (x > 0) res += "*x^" + std::to_string(x);
 
-		for (int i : {x, y, z}) {
-			if (i > 0) res += '*' + _NAME_OF_ARG(i) + '^' + std::to_string(i);
-			else if (i < 0) res += '*' + _NAME_OF_ARG(i) + '^' + '(' + std::to_string(i) + ")";
-		}
+		if (y < 0) res += "*y^(" + std::to_string(y) + ")";
+		else if (y == 1) res += "*y";
+		else if (y > 0) res += "*y^" + std::to_string(y);
+
+		if (z < 0) res += "*z^(" + std::to_string(x) + ")";
+		else if (z == 1) res += "*z";
+		else if (z > 0) res += "*z^" + std::to_string(z);
+
+		res += " ";
 	}
 
 	return res;
