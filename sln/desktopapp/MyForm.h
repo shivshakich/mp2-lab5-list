@@ -5,6 +5,7 @@
 #include <vector>
 #include "../../include/tpolynom.h"
 
+static std::vector<TPolynom> vec;
 
 namespace CppWinForm1 {
 
@@ -52,6 +53,8 @@ namespace CppWinForm1 {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Column2;
 
 
+
+
 	protected:
 		
 	private:
@@ -95,12 +98,12 @@ namespace CppWinForm1 {
 			// 
 			this->textBox1->Location = System::Drawing::Point(107, 13);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(500, 22);
+			this->textBox1->Size = System::Drawing::Size(612, 22);
 			this->textBox1->TabIndex = 1;
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(671, 13);
+			this->button1->Location = System::Drawing::Point(770, 10);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(100, 23);
 			this->button1->TabIndex = 2;
@@ -112,7 +115,7 @@ namespace CppWinForm1 {
 			// 
 			this->textBox2->Location = System::Drawing::Point(107, 41);
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(100, 22);
+			this->textBox2->Size = System::Drawing::Size(200, 22);
 			this->textBox2->TabIndex = 3;
 			// 
 			// label2
@@ -126,27 +129,28 @@ namespace CppWinForm1 {
 			// 
 			// textBox3
 			// 
-			this->textBox3->Location = System::Drawing::Point(213, 41);
+			this->textBox3->Location = System::Drawing::Point(313, 41);
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(100, 22);
+			this->textBox3->Size = System::Drawing::Size(200, 22);
 			this->textBox3->TabIndex = 5;
 			this->textBox3->TextChanged += gcnew System::EventHandler(this, &MyForm::textBox3_TextChanged);
 			// 
 			// textBox4
 			// 
-			this->textBox4->Location = System::Drawing::Point(319, 41);
+			this->textBox4->Location = System::Drawing::Point(519, 41);
 			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(100, 22);
+			this->textBox4->Size = System::Drawing::Size(200, 22);
 			this->textBox4->TabIndex = 6;
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(671, 43);
+			this->button2->Location = System::Drawing::Point(771, 40);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(99, 23);
 			this->button2->TabIndex = 7;
 			this->button2->Text = L"ВЫБРАТЬ";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
 			// dataGridView1
 			// 
@@ -160,24 +164,26 @@ namespace CppWinForm1 {
 			this->dataGridView1->Name = L"dataGridView1";
 			this->dataGridView1->RowHeadersWidth = 51;
 			this->dataGridView1->RowTemplate->Height = 24;
-			this->dataGridView1->Size = System::Drawing::Size(754, 471);
+			this->dataGridView1->Size = System::Drawing::Size(854, 471);
 			this->dataGridView1->TabIndex = 8;
 			// 
 			// Column1
 			// 
+			this->Column1->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
 			this->Column1->HeaderText = L"№";
 			this->Column1->MinimumWidth = 6;
 			this->Column1->Name = L"Column1";
 			this->Column1->ReadOnly = true;
-			this->Column1->Width = 125;
+			this->Column1->Width = 50;
 			// 
 			// Column2
 			// 
+			this->Column2->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
 			this->Column2->HeaderText = L"POLYNOMIAL";
 			this->Column2->MinimumWidth = 6;
 			this->Column2->Name = L"Column2";
 			this->Column2->ReadOnly = true;
-			this->Column2->Width = 125;
+			this->Column2->Width = 121;
 			// 
 			// MyForm
 			// 
@@ -185,7 +191,7 @@ namespace CppWinForm1 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(192)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->ClientSize = System::Drawing::Size(782, 553);
+			this->ClientSize = System::Drawing::Size(882, 553);
 			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->textBox4);
@@ -208,7 +214,112 @@ namespace CppWinForm1 {
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	std::string in = msclr::interop::marshal_as< std::string >(textBox1->Text);
 	
-	//pol = in;
+	try {
+		TPolynom pol(in);
+		vec.push_back(pol);
+
+		int ind = dataGridView1->Rows->Add();
+		dataGridView1->Rows[ind]->Cells[0]->Value = vec.size();
+
+		// ">:-U"
+		String^ s = gcnew String(pol.ToString().c_str());		
+		dataGridView1->Rows[ind]->Cells[1]->Value = s;
+	}
+	catch (...) {
+
+		textBox1->Text = "НЕПРАВИЛЬНАЯ ЗАПИСЬ ПОЛИНОМА";
+	}
+}
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	std::string left = msclr::interop::marshal_as< std::string >(textBox2->Text);
+	std::string op = msclr::interop::marshal_as< std::string >(textBox3->Text);
+	std::string right = msclr::interop::marshal_as< std::string >(textBox4->Text);
+
+	int l, r;
+	int ind;
+	String^ s;
+	try {
+		size_t len;
+		l = std::stoi(left, &len);
+
+		if (len != left.length()) throw "";
+		if (l < 1 || l > vec.size()) throw "";
+		--l;
+	}
+	catch (...) { textBox2->Text = "НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ"; }
+
+	if (op == "DEL") {
+		for (int i = l + 1; i < vec.size(); ++i) vec[i - 1] = vec[i];
+		vec.pop_back();
+
+		dataGridView1->Rows->Clear();
+
+		for (int i = 0; i < vec.size(); ++i) {
+			dataGridView1->Rows->Add();
+			dataGridView1->Rows[i]->Cells[0]->Value = i + 1;
+			String^ s = gcnew String(vec[i].ToString().c_str());
+			dataGridView1->Rows[i]->Cells[1]->Value = s;
+		}
+	}
+	else if (op.length() == 1) {
+		char c = op[0];
+
+		try {
+			size_t len;
+			r = std::stoi(right, &len);
+
+			if (len != right.length()) throw "";
+			if (r < 1 || r > vec.size()) throw "";
+			--l;
+		}
+		catch (...) { textBox2->Text = "НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ"; }
+		try {
+			switch (c) {
+			case '+':
+				vec.push_back(vec[l] + vec[r]);
+				ind = dataGridView1->Rows->Add();
+				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
+				s = gcnew String(vec[ind].ToString().c_str());
+				dataGridView1->Rows[ind]->Cells[1]->Value = s;
+				break;
+			case '-':
+				vec.push_back(vec[l] + vec[r]);
+				ind = dataGridView1->Rows->Add();
+				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
+				s = gcnew String(vec[ind].ToString().c_str());
+				dataGridView1->Rows[ind]->Cells[1]->Value = s;
+				break;
+			case '*':
+				vec.push_back(vec[l] * vec[r]);
+				ind = dataGridView1->Rows->Add();
+				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
+				s = gcnew String(vec[ind].ToString().c_str());
+				dataGridView1->Rows[ind]->Cells[1]->Value = s;
+				break;
+			case '/':
+				if (vec[r].GetLength() != 1) throw "";
+				vec[r].Reset();
+				vec.push_back(vec[l] / vec[r].GetCurr()->value);
+				ind = dataGridView1->Rows->Add();
+				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
+				s = gcnew String(vec[ind].ToString().c_str());
+				dataGridView1->Rows[ind]->Cells[1]->Value = s;
+				break;
+			case '=': 
+				vec[l] = vec[r];
+				dataGridView1->Rows[l]->Cells[0]->Value = l+1;
+				s = gcnew String(vec[l].ToString().c_str());
+				dataGridView1->Rows[l]->Cells[1]->Value = s;
+				break;
+			}
+		}
+		catch (...) {
+			textBox1->Text = "НЕ";
+			textBox2->Text = "УДАЛОСЬ";
+			textBox3->Text = "ВЫПОЛНИТЬ";
+		}
+	}
+	else textBox3->Text = "НЕПРАВИЛЬНАЯ ОПЕРАЦИЯ";
 }
 };
 }
