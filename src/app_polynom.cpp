@@ -1,8 +1,8 @@
 #include "../include/app_polynom.h"
 
-AppPolynom::AppPolynom() : Arr(new std::vector<TPolynom>) {}
+AppPolynom::AppPolynom() {}
 
-AppPolynom::~AppPolynom() { delete Arr; }
+AppPolynom::~AppPolynom() {}
 
 void AppPolynom::AddPolynom(const string& in) {
 	TPolynom tp;
@@ -10,7 +10,7 @@ void AppPolynom::AddPolynom(const string& in) {
 	try { tp = in; }
 	catch (...) { throw ""; }
 
-	Arr->push_back(tp);
+	Arr.push_back(tp);
 }
 
 void AppPolynom::DelPolynom(int pos) {
@@ -18,28 +18,28 @@ void AppPolynom::DelPolynom(int pos) {
 
 	for (int i = pos + 1; i < this->GetSize(); ++i) Arr[i - 1] = Arr[i];
 
-	Arr->pop_back();
+	Arr.pop_back();
 }
 
-void AppPolynom::DelAll() { Arr->clear(); }
+void AppPolynom::DelAll() { Arr.clear(); }
 
 void AppPolynom::Perform(int l, char op, int r) {
-	const size_t SIZE = Arr->size();
+	const size_t SIZE = Arr.size();
 
 	if (l < 0 || l >= SIZE || r < 0 || r >= SIZE) throw "";
 	if (SIZE == MAXSIZE) throw "";
 
 	try {
 		switch (op) {
-		case '+': Arr->push_back(Arr->at(l) + Arr->at(r)); break;
-		case '-': Arr->push_back(Arr->at(l) - Arr->at(r)); break;
-		case '*': Arr->push_back(Arr->at(l) * Arr->at(r)); break;
+		case '+': Arr.push_back(Arr.at(l) + Arr.at(r)); break;
+		case '-': Arr.push_back(Arr.at(l) - Arr.at(r)); break;
+		case '*': Arr.push_back(Arr.at(l) * Arr.at(r)); break;
 		case '/':
-			if (Arr->at(r).GetLength() != 1) throw "";
-			Arr->at(r).Reset();
-			Arr->push_back(Arr->at(l) / (Arr->at(r).GetCurr()->value));
+			if (Arr.at(r).GetLength() != 1) throw "";
+			Arr.at(r).Reset();
+			Arr.push_back(Arr.at(l) / (Arr.at(r).GetCurr()->value));
 			break;
-		case '=': Arr->at(l) = Arr->at(r); break;
+		case '=': Arr.at(l) = Arr.at(r); break;
 		default: throw "";
 		}
 	}
