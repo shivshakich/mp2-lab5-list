@@ -194,7 +194,7 @@ TPolynom::TPolynom(TPolynom& _polynom)
 
 	pHead->value = { 0.0 };
 }
-
+/*
 TPolynom::TPolynom(const TPolynom& _polynom) {
 	this->TPolynom::TPolynom();
 
@@ -205,7 +205,7 @@ TPolynom::TPolynom(const TPolynom& _polynom) {
 	for (TNode<TMonom> *p = _polynom.pFirst; p != ph; p = p->pNext) 
 		this->InsLast(p->value);
 }
-
+*/
 TPolynom::TPolynom(TPolynom&& _polynom)
 {
 	this->TPolynom::TPolynom();

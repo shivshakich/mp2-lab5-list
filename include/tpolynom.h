@@ -24,7 +24,7 @@ public:
 	TPolynom(double _coeff, int _x = 0, int _y = 0, int _z = 0);
 	TPolynom(const TMonom& _monom);
 	TPolynom(TPolynom& _polynom);
-	TPolynom(const TPolynom& _polynom);
+	//TPolynom(const TPolynom& _polynom);
 	TPolynom(TPolynom&& _polynom);
 	TPolynom(const string& _str);
 	//~TPolynom();

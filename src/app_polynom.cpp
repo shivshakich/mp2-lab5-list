@@ -34,10 +34,10 @@ void AppPolynom::Perform(int l, char op, int r) {
 		case '+': Arr->push_back(Arr->at(l) + Arr->at(r)); break;
 		case '-': Arr->push_back(Arr->at(l) - Arr->at(r)); break;
 		case '*': Arr->push_back(Arr->at(l) * Arr->at(r)); break;
-		case '/': 
+		case '/':
 			if (Arr->at(r).GetLength() != 1) throw "";
 			Arr->at(r).Reset();
-			Arr->push_back(Arr->at(l) / (Arr->at(r).GetCurr()->value)); 
+			Arr->push_back(Arr->at(l) / (Arr->at(r).GetCurr()->value));
 			break;
 		case '=': Arr->at(l) = Arr->at(r); break;
 		default: throw "";
