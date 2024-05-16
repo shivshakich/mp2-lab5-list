@@ -16,7 +16,7 @@ void help() {
 int main() {
 	help();
 
-	//AppPolynom app;
+	AppPolynom app;
 
 	return 0;
 }
