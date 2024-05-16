@@ -226,8 +226,8 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 		dataGridView1->Rows[ind]->Cells[1]->Value = s;
 	}
 	catch (...) {
-
-		textBox1->Text = "НЕПРАВИЛЬНАЯ ЗАПИСЬ ПОЛИНОМА";
+		textBox1->Text = "НЕПРАВИЛЬНАЯ_ЗАПИСЬ_ПОЛИНОМА";
+		return;
 	}
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -238,6 +238,8 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	int l, r;
 	int ind;
 	String^ s;
+	TPolynom tp;
+
 	try {
 		size_t len;
 		l = std::stoi(left, &len);
@@ -246,7 +248,10 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 		if (l < 1 || l > vec.size()) throw "";
 		--l;
 	}
-	catch (...) { textBox2->Text = "НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ"; }
+	catch (...) { 
+		textBox2->Text = "НЕПРАВИЛЬНОЕ_ЗНАЧЕНИЕ";
+		return;
+	}
 
 	if (op == "DEL") {
 		for (int i = l + 1; i < vec.size(); ++i) vec[i - 1] = vec[i];
@@ -270,27 +275,30 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 
 			if (len != right.length()) throw "";
 			if (r < 1 || r > vec.size()) throw "";
-			--l;
+			--r;
 		}
-		catch (...) { textBox2->Text = "НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ"; }
+		catch (...) { textBox4->Text = "НЕПРАВИЛЬНОЕ_ЗНАЧЕНИЕ"; return; }
 		try {
 			switch (c) {
 			case '+':
-				vec.push_back(vec[l] + vec[r]);
+				tp = vec[l] + vec[r];
+				vec.push_back(tp);
 				ind = dataGridView1->Rows->Add();
 				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
 				s = gcnew String(vec[ind].ToString().c_str());
 				dataGridView1->Rows[ind]->Cells[1]->Value = s;
 				break;
 			case '-':
-				vec.push_back(vec[l] + vec[r]);
+				tp = vec[l] - vec[r];
+				vec.push_back(tp);
 				ind = dataGridView1->Rows->Add();
 				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
 				s = gcnew String(vec[ind].ToString().c_str());
 				dataGridView1->Rows[ind]->Cells[1]->Value = s;
 				break;
 			case '*':
-				vec.push_back(vec[l] * vec[r]);
+				tp = vec[l] * vec[r];
+				vec.push_back(tp);
 				ind = dataGridView1->Rows->Add();
 				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
 				s = gcnew String(vec[ind].ToString().c_str());
@@ -299,14 +307,16 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 			case '/':
 				if (vec[r].GetLength() != 1) throw "";
 				vec[r].Reset();
-				vec.push_back(vec[l] / vec[r].GetCurr()->value);
+				tp = vec[l] / vec[r].GetCurr()->value;
+				vec.push_back(tp);
 				ind = dataGridView1->Rows->Add();
 				dataGridView1->Rows[ind]->Cells[0]->Value = ind + 1;
 				s = gcnew String(vec[ind].ToString().c_str());
 				dataGridView1->Rows[ind]->Cells[1]->Value = s;
 				break;
 			case '=': 
-				vec[l] = vec[r];
+				tp = vec[r];
+				vec[l] = tp;
 				dataGridView1->Rows[l]->Cells[0]->Value = l+1;
 				s = gcnew String(vec[l].ToString().c_str());
 				dataGridView1->Rows[l]->Cells[1]->Value = s;
@@ -314,12 +324,15 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 			}
 		}
 		catch (...) {
-			textBox1->Text = "НЕ";
-			textBox2->Text = "УДАЛОСЬ";
-			textBox3->Text = "ВЫПОЛНИТЬ";
+			textBox2->Text = "НЕ";
+			textBox3->Text = "УДАЛОСЬ";
+			textBox4->Text = "ВЫПОЛНИТЬ";
+			return;
 		}
 	}
-	else textBox3->Text = "НЕПРАВИЛЬНАЯ ОПЕРАЦИЯ";
+	else {
+		textBox3->Text = "НЕПРАВИЛЬНАЯ_ОПЕРАЦИЯ"; return;
+	}
 }
 };
 }
