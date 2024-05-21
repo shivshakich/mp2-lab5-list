@@ -666,7 +666,7 @@ string TPolynom::ToString()
 		else if (z == 1) res += "*z";
 		else if (z > 0) res += "*z^" + std::to_string(z);
 
-		res += " ";
+		res += "";
 	}
 
 	return res;
