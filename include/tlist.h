@@ -3,8 +3,8 @@
 template <class T>
 struct TNode {
 	T value;
-	TNode<T>* pNext;
-	TNode() { pNext = nullptr; }
+	TNode<T>* pNext = nullptr;
+	// TNode() { pNext = nullptr; }
 };
 
 template <class T>
@@ -62,6 +62,8 @@ TList<T>::TList() : pStop(nullptr), pFirst(pStop), pLast(pStop), length(0), pCur
 template <class T>										/* type conversion constructor */
 TList<T>::TList(const T& _val) : pStop(nullptr), pCurr(pStop), pPrev(pStop), pos(-1) {
 	pFirst = new TNode<T>{ _val, pStop };
+	//pFirst->value = _val;
+	//pFirst->pNext = pStop;
 	pLast = pFirst;
 	length = 1;
 }
