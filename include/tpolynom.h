@@ -54,6 +54,9 @@ public:
 	bool operator==(TPolynom& _polynom);
 	bool operator!=(TPolynom& _polynom);
 
+	int GetMINDEGREE() const noexcept { return MINDEGREE; }
+	int GetMAXDEGREE() const noexcept { return MAXDEGREE; }
+
 	string ToString();
 	friend bool CheckOrder(TPolynom& _pol);
 
