@@ -134,6 +134,8 @@ THeadRing<T>& THeadRing<T>::operator=(TList<T>& l)
 template <class T>
 THeadRing<T>& THeadRing<T>::operator=(THeadRing<T>& hl)
 {
+	if (this == &hl) return *this;
+
 	const int LEN = hl.length;
 	while (length > LEN)
 		this->DelFirst();
